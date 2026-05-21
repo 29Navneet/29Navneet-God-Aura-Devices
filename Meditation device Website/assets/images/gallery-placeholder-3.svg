@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 600" role="img" aria-labelledby="title desc">
+  <title id="title">Focus meditation placeholder image</title>
+  <desc id="desc">A clean illustrated focus scene with a meditation wearable, desk plant, and soft rhythmic signals.</desc>
+  <defs>
+    <linearGradient id="room" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#fffaf0"/>
+      <stop offset=".52" stop-color="#f8fcfc"/>
+      <stop offset="1" stop-color="#e6fffe"/>
+    </linearGradient>
+    <linearGradient id="band" x1="298" y1="284" x2="662" y2="284" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#00b8b3"/>
+      <stop offset=".55" stop-color="#0a1628"/>
+      <stop offset="1" stop-color="#5b6ee1"/>
+    </linearGradient>
+  </defs>
+  <rect width="960" height="600" fill="url(#room)"/>
+  <rect x="0" y="414" width="960" height="186" fill="#ffffff" opacity=".82"/>
+  <rect x="184" y="404" width="592" height="34" rx="17" fill="#0a1628" opacity=".12"/>
+  <path d="M298 316c48-82 316-82 364 0" fill="none" stroke="url(#band)" stroke-width="34" stroke-linecap="round"/>
+  <path d="M360 316c34-36 206-36 240 0" fill="none" stroke="#ffffff" stroke-width="12" stroke-linecap="round" opacity=".8"/>
+  <rect x="438" y="260" width="84" height="88" rx="28" fill="#ffffff"/>
+  <circle cx="480" cy="304" r="22" fill="#00d4cf"/>
+  <path d="M196 260c25-52 68-81 128-88" fill="none" stroke="#00b8b3" stroke-width="8" stroke-linecap="round" opacity=".34"/>
+  <path d="M764 260c-25-52-68-81-128-88" fill="none" stroke="#5b6ee1" stroke-width="8" stroke-linecap="round" opacity=".28"/>
+  <rect x="122" y="318" width="78" height="86" rx="16" fill="#00b8b3" opacity=".26"/>
+  <path d="M160 318c-34-38-28-84 22-116 14 50 2 89-22 116z" fill="#00b8b3" opacity=".55"/>
+  <path d="M158 318c34-36 73-41 118-14-38 30-77 34-118 14z" fill="#5b6ee1" opacity=".38"/>
+  <circle cx="785" cy="152" r="44" fill="#ffd166" opacity=".35"/>
+  <circle cx="108" cy="104" r="62" fill="#00d4cf" opacity=".11"/>
+</svg>

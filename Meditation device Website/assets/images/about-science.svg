@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 520 360" role="img" aria-labelledby="title desc">
+  <title id="title">Guided vibration meditation illustration</title>
+  <desc id="desc">A peaceful abstract scene showing rhythmic vibration waves, sleep, focus, and relaxation signals.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#f7fffd"/>
+      <stop offset=".55" stop-color="#effbff"/>
+      <stop offset="1" stop-color="#fff7e6"/>
+    </linearGradient>
+    <linearGradient id="wave" x1="72" y1="180" x2="448" y2="180" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#00d4cf"/>
+      <stop offset=".52" stop-color="#5b6ee1"/>
+      <stop offset="1" stop-color="#ffd166"/>
+    </linearGradient>
+    <filter id="soft" x="-25%" y="-25%" width="150%" height="150%">
+      <feGaussianBlur stdDeviation="8" result="blur"/>
+      <feBlend in="SourceGraphic" in2="blur"/>
+    </filter>
+  </defs>
+  <rect width="520" height="360" rx="28" fill="url(#bg)"/>
+  <circle cx="260" cy="180" r="106" fill="#ffffff" opacity=".86"/>
+  <circle cx="260" cy="180" r="78" fill="#00d4cf" opacity=".09"/>
+  <circle cx="260" cy="180" r="46" fill="#5b6ee1" opacity=".1"/>
+  <path d="M72 182c32-42 63-42 95 0s63 42 95 0 63-42 95 0 62 42 91 0" fill="none" stroke="url(#wave)" stroke-width="14" stroke-linecap="round" filter="url(#soft)"/>
+  <path d="M100 226c26-24 50-24 76 0s50 24 76 0 50-24 76 0 50 24 76 0" fill="none" stroke="#00b8b3" stroke-width="6" stroke-linecap="round" opacity=".35"/>
+  <path d="M116 136c20-20 40-20 60 0s40 20 60 0 40-20 60 0 40 20 60 0" fill="none" stroke="#5b6ee1" stroke-width="6" stroke-linecap="round" opacity=".32"/>
+  <rect x="217" y="260" width="86" height="16" rx="8" fill="#0a1628" opacity=".14"/>
+  <circle cx="152" cy="86" r="24" fill="#00d4cf" opacity=".24"/>
+  <circle cx="378" cy="92" r="18" fill="#ffd166" opacity=".36"/>
+  <circle cx="408" cy="260" r="30" fill="#5b6ee1" opacity=".16"/>
+  <path d="M160 264c-20-9-35-25-43-46" stroke="#00b8b3" stroke-width="5" stroke-linecap="round" opacity=".28"/>
+  <path d="M360 264c20-9 35-25 43-46" stroke="#5b6ee1" stroke-width="5" stroke-linecap="round" opacity=".24"/>
+</svg>
