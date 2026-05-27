@@ -1,0 +1,2128 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GodAura Devices — Elevate Your Consciousness</title>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@200;300;400;500;600;700;800&family=Space+Grotesk:wght@300;400;500;600;700&family=Orbitron:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            heading: ['Sora', 'sans-serif'],
+            body: ['Space Grotesk', 'sans-serif'],
+            accent: ['Orbitron', 'sans-serif'],
+          },
+          colors: {
+            cyan: {
+              glow: '#22d3ee',
+              primary: '#06b6d4',
+              deep: '#0891b2',
+              dark: '#164e63',
+            },
+            navy: {
+              950: '#0a0e1a',
+              900: '#0f172a',
+              800: '#1e293b',
+              700: '#334155',
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+
+  <!-- Iconify -->
+  <script src="https://code.iconify.design/iconify-icon/1.0.7/iconify-icon.min.js"></script>
+
+  <!-- ===================== CUSTOM CSS ===================== -->
+  <style>
+    /* ---------- CSS VARIABLES ---------- */
+    :root {
+      --bg-primary: #f0fdfa;
+      --bg-secondary: #ffffff;
+      --bg-tertiary: #e0f7fa;
+      --bg-nav: rgba(240, 253, 250, 0.75);
+      --text-primary: #0a0e1a;
+      --text-secondary: #334155;
+      --text-muted: #64748b;
+      --cyan-glow: #06b6d4;
+      --cyan-light: #67e8f9;
+      --cyan-neon: #22d3ee;
+      --card-bg: rgba(255, 255, 255, 0.55);
+      --card-border: rgba(6, 182, 212, 0.2);
+      --card-shadow: rgba(6, 182, 212, 0.08);
+      --modal-overlay: rgba(10, 14, 26, 0.6);
+      --footer-bg: #0a0e1a;
+    }
+
+    .dark {
+      --bg-primary: #0a0e1a;
+      --bg-secondary: #0f172a;
+      --bg-tertiary: #111827;
+      --bg-nav: rgba(10, 14, 26, 0.8);
+      --text-primary: #f0fdfa;
+      --text-secondary: #cbd5e1;
+      --text-muted: #94a3b8;
+      --card-bg: rgba(15, 23, 42, 0.55);
+      --card-border: rgba(6, 182, 212, 0.25);
+      --card-shadow: rgba(6, 182, 212, 0.12);
+      --modal-overlay: rgba(0, 0, 0, 0.75);
+      --footer-bg: #050810;
+    }
+
+    /* ---------- BASE RESET ---------- */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Space Grotesk', sans-serif;
+      background-color: var(--bg-primary);
+      color: var(--text-primary);
+      transition: background-color 0.5s ease, color 0.5s ease;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    h1, h2, h3, h4, h5, h6 { font-family: 'Sora', sans-serif; }
+    a { text-decoration: none; color: inherit; }
+
+    ::selection {
+      background: rgba(6, 182, 212, 0.25);
+      color: var(--text-primary);
+    }
+
+    /* ---------- LOADING SCREEN ---------- */
+    #loader {
+      position: fixed; inset: 0; z-index: 9999;
+      background: #0a0e1a;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      transition: opacity 0.6s ease, visibility 0.6s ease;
+    }
+    #loader.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
+
+    .loader-ring {
+      width: 80px; height: 80px;
+      border: 3px solid rgba(6, 182, 212, 0.15);
+      border-top: 3px solid #06b6d4;
+      border-radius: 50%;
+      animation: loaderSpin 1s linear infinite;
+      margin-bottom: 28px;
+      box-shadow: 0 0 30px rgba(6, 182, 212, 0.3);
+    }
+
+    .loader-text {
+      font-family: 'Sora', sans-serif;
+      font-size: 24px; font-weight: 600;
+      color: #22d3ee;
+      letter-spacing: 0.15em;
+      animation: loaderPulse 1.5s ease-in-out infinite;
+    }
+
+    .loader-sub {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 12px; color: rgba(34, 211, 238, 0.5);
+      letter-spacing: 0.3em; text-transform: uppercase;
+      margin-top: 8px;
+    }
+
+    @keyframes loaderSpin { to { transform: rotate(360deg); } }
+    @keyframes loaderPulse {
+      0%, 100% { opacity: 0.6; }
+      50% { opacity: 1; }
+    }
+
+    /* ---------- CUSTOM CURSOR ---------- */
+    .cursor-dot {
+      position: fixed; width: 8px; height: 8px;
+      background: #06b6d4; border-radius: 50%;
+      pointer-events: none; z-index: 9998;
+      transition: transform 0.15s ease;
+      mix-blend-mode: difference;
+    }
+    .cursor-ring {
+      position: fixed; width: 36px; height: 36px;
+      border: 1.5px solid rgba(6, 182, 212, 0.5);
+      border-radius: 50%; pointer-events: none; z-index: 9997;
+      transition: transform 0.3s ease, width 0.3s ease, height 0.3s ease, border-color 0.3s ease;
+    }
+    @media (max-width: 1023px) {
+      .cursor-dot, .cursor-ring { display: none !important; }
+    }
+
+    /* ---------- SCROLL PROGRESS ---------- */
+    #scroll-progress {
+      position: fixed; top: 0; left: 0; height: 3px;
+      background: linear-gradient(90deg, #06b6d4, #22d3ee, #67e8f9);
+      z-index: 10001; width: 0%;
+      transition: width 0.05s linear;
+      box-shadow: 0 0 10px rgba(6, 182, 212, 0.5);
+    }
+
+    /* ---------- PARTICLES CANVAS ---------- */
+    #particles-canvas {
+      position: fixed; inset: 0; z-index: 0;
+      pointer-events: none;
+    }
+
+    /* ---------- AMBIENT ORBS ---------- */
+    .ambient-orb {
+      position: fixed; border-radius: 50%;
+      filter: blur(100px); pointer-events: none; z-index: 0;
+      opacity: 0.5;
+      transition: opacity 0.5s ease;
+    }
+    .dark .ambient-orb { opacity: 0.3; }
+
+    .orb-1 {
+      width: 500px; height: 500px;
+      background: radial-gradient(circle, rgba(6,182,212,0.2), transparent 70%);
+      top: -100px; left: -150px;
+      animation: orbFloat1 25s ease-in-out infinite;
+    }
+    .orb-2 {
+      width: 400px; height: 400px;
+      background: radial-gradient(circle, rgba(34,211,238,0.15), transparent 70%);
+      bottom: 10%; right: -100px;
+      animation: orbFloat2 30s ease-in-out infinite;
+    }
+    .orb-3 {
+      width: 350px; height: 350px;
+      background: radial-gradient(circle, rgba(20,184,166,0.12), transparent 70%);
+      top: 40%; left: 30%;
+      animation: orbFloat3 20s ease-in-out infinite;
+    }
+
+    @keyframes orbFloat1 {
+      0%, 100% { transform: translate(0, 0); }
+      33% { transform: translate(80px, 60px); }
+      66% { transform: translate(-40px, 100px); }
+    }
+    @keyframes orbFloat2 {
+      0%, 100% { transform: translate(0, 0); }
+      33% { transform: translate(-60px, -80px); }
+      66% { transform: translate(40px, -40px); }
+    }
+    @keyframes orbFloat3 {
+      0%, 100% { transform: translate(0, 0); }
+      50% { transform: translate(60px, -60px); }
+    }
+
+    /* ---------- NAVBAR ---------- */
+    .navbar {
+      position: fixed; top: 3px; left: 16px; right: 16px;
+      height: 64px; z-index: 10000;
+      background: var(--bg-nav);
+      backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+      border: 1px solid var(--card-border);
+      border-radius: 9999px;
+      padding: 0 24px;
+      display: flex; align-items: center; justify-content: space-between;
+      transition: background 0.4s ease, border-color 0.4s ease, box-shadow 0.4s ease;
+    }
+    .navbar.scrolled {
+      box-shadow: 0 4px 30px var(--card-shadow);
+    }
+
+    .nav-logo {
+      display: flex; align-items: center; gap: 10px;
+      font-family: 'Sora', sans-serif;
+      font-weight: 700; font-size: 18px;
+      color: var(--text-primary);
+      transition: color 0.3s ease;
+    }
+    .nav-logo-icon {
+      width: 32px; height: 32px; border-radius: 8px;
+      background: linear-gradient(135deg, #06b6d4, #22d3ee);
+      display: flex; align-items: center; justify-content: center;
+      color: white; font-size: 16px;
+      box-shadow: 0 0 15px rgba(6, 182, 212, 0.4);
+    }
+
+    .nav-links {
+      display: flex; align-items: center; gap: 8px;
+    }
+    .nav-link {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 14px; font-weight: 500;
+      color: var(--text-secondary);
+      padding: 8px 16px; border-radius: 9999px;
+      transition: all 0.3s ease;
+      position: relative;
+    }
+    .nav-link:hover, .nav-link.active {
+      color: #06b6d4;
+      background: rgba(6, 182, 212, 0.08);
+    }
+    .nav-link.active::after {
+      content: ''; position: absolute;
+      bottom: 4px; left: 50%; transform: translateX(-50%);
+      width: 4px; height: 4px; border-radius: 50%;
+      background: #06b6d4;
+      box-shadow: 0 0 6px rgba(6, 182, 212, 0.6);
+    }
+
+    .nav-actions {
+      display: flex; align-items: center; gap: 8px;
+    }
+
+    .dark-toggle {
+      width: 40px; height: 40px; border-radius: 50%;
+      border: 1px solid var(--card-border);
+      background: var(--card-bg);
+      color: var(--text-secondary);
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer; transition: all 0.3s ease;
+      font-size: 18px;
+    }
+    .dark-toggle:hover {
+      border-color: #06b6d4;
+      color: #06b6d4;
+      box-shadow: 0 0 15px rgba(6, 182, 212, 0.2);
+    }
+
+    .btn-signin-nav {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 13px; font-weight: 600;
+      padding: 8px 20px; border-radius: 9999px;
+      background: linear-gradient(135deg, #06b6d4, #0891b2);
+      color: white; border: none; cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 0 20px rgba(6, 182, 212, 0.3);
+      white-space: nowrap;
+    }
+    .btn-signin-nav:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 0 30px rgba(6, 182, 212, 0.5);
+    }
+
+    @media (max-width: 480px) {
+      .btn-signin-nav { font-size: 11px; padding: 6px 14px; }
+    }
+
+    .hamburger {
+      display: none; width: 40px; height: 40px;
+      border-radius: 50%; border: 1px solid var(--card-border);
+      background: var(--card-bg); color: var(--text-secondary);
+      align-items: center; justify-content: center;
+      cursor: pointer; transition: all 0.3s ease;
+      font-size: 20px;
+    }
+    .hamburger:hover { border-color: #06b6d4; color: #06b6d4; }
+
+    @media (max-width: 1023px) {
+      .nav-links { display: none !important; }
+      .hamburger { display: flex; }
+    }
+
+    /* ---------- MOBILE MENU ---------- */
+    .mobile-menu {
+      position: fixed; inset: 0; z-index: 10002;
+      visibility: hidden; opacity: 0;
+      transition: visibility 0.4s ease, opacity 0.4s ease;
+    }
+    .mobile-menu.open { visibility: visible; opacity: 1; }
+
+    .mobile-menu-overlay {
+      position: absolute; inset: 0;
+      background: rgba(10, 14, 26, 0.7);
+      backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+    }
+
+    .mobile-menu-panel {
+      position: absolute; top: 0; right: 0;
+      width: min(340px, 88vw); height: 100%;
+      background: var(--bg-secondary);
+      border-left: 1px solid var(--card-border);
+      padding: 80px 28px 40px;
+      transform: translateX(100%);
+      transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+      overflow-y: auto;
+    }
+    .mobile-menu.open .mobile-menu-panel { transform: translateX(0); }
+
+    .mobile-menu-header {
+      display: flex; align-items: center; gap: 10px;
+      margin-bottom: 32px; padding-bottom: 20px;
+      border-bottom: 1px solid var(--card-border);
+    }
+    .mobile-menu-header-logo {
+      width: 32px; height: 32px; border-radius: 8px;
+      background: linear-gradient(135deg, #06b6d4, #22d3ee);
+      display: flex; align-items: center; justify-content: center;
+      color: white; font-size: 16px;
+      box-shadow: 0 0 15px rgba(6, 182, 212, 0.4);
+    }
+    .mobile-menu-header-text {
+      font-family: 'Sora', sans-serif;
+      font-weight: 700; font-size: 17px;
+      color: var(--text-primary);
+      transition: color 0.5s ease;
+    }
+
+    .mobile-menu-close {
+      position: absolute; top: 20px; right: 20px;
+      width: 40px; height: 40px; border-radius: 50%;
+      border: 1px solid var(--card-border);
+      background: var(--card-bg); color: var(--text-primary);
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer; font-size: 20px;
+      transition: all 0.3s ease;
+    }
+    .mobile-menu-close:hover { border-color: #06b6d4; color: #06b6d4; }
+
+    .mobile-menu-section-label {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 9px; font-weight: 600;
+      letter-spacing: 0.2em; text-transform: uppercase;
+      color: #06b6d4; margin-top: 24px; margin-bottom: 8px;
+      padding-left: 4px;
+    }
+
+    .mobile-nav-link {
+      display: flex; align-items: center; gap: 12px;
+      font-family: 'Sora', sans-serif;
+      font-size: 16px; font-weight: 500;
+      color: var(--text-primary);
+      padding: 14px 12px; border-radius: 12px;
+      transition: all 0.3s ease;
+    }
+    .mobile-nav-link:hover {
+      color: #06b6d4;
+      background: rgba(6, 182, 212, 0.08);
+      padding-left: 18px;
+      text-shadow: 0 0 20px rgba(6, 182, 212, 0.3);
+    }
+    .mobile-nav-link iconify-icon {
+      font-size: 18px; color: var(--text-muted);
+      transition: color 0.3s ease;
+    }
+    .mobile-nav-link:hover iconify-icon { color: #06b6d4; }
+
+    .mobile-menu .btn-signin-mobile {
+      display: block; width: 100%;
+      margin-top: 28px; padding: 14px;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 15px; font-weight: 600;
+      text-align: center; border-radius: 14px;
+      background: linear-gradient(135deg, #06b6d4, #0891b2);
+      color: white; border: none; cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 0 25px rgba(6, 182, 212, 0.3);
+    }
+    .mobile-menu .btn-signin-mobile:hover {
+      box-shadow: 0 0 35px rgba(6, 182, 212, 0.5);
+      transform: translateY(-1px);
+    }
+
+    /* ---------- HERO SECTION ---------- */
+    .hero-section {
+      min-height: 100vh; display: flex; align-items: center;
+      padding: 100px 24px 60px;
+      position: relative; z-index: 1;
+    }
+
+    .hero-container {
+      max-width: 1280px; margin: 0 auto; width: 100%;
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 60px; align-items: center;
+    }
+
+    .hero-image-wrapper {
+      position: relative; display: flex;
+      justify-content: center; align-items: center;
+    }
+
+    .hero-glow {
+      position: absolute; width: 400px; height: 400px;
+      background: radial-gradient(circle, rgba(6,182,212,0.25), transparent 70%);
+      border-radius: 50%; filter: blur(60px);
+      animation: heroGlowPulse 4s ease-in-out infinite;
+    }
+
+    @keyframes heroGlowPulse {
+      0%, 100% { transform: scale(1); opacity: 0.6; }
+      50% { transform: scale(1.15); opacity: 0.9; }
+    }
+
+    .hero-image {
+      position: relative; width: 100%; max-width: 460px;
+      aspect-ratio: 3/4; border-radius: 32px;
+      object-fit: cover;
+      animation: heroFloat 6s ease-in-out infinite;
+      border: 1px solid var(--card-border);
+      box-shadow: 0 20px 60px rgba(6, 182, 212, 0.15);
+    }
+
+    @keyframes heroFloat {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-16px); }
+    }
+
+    .hero-tag {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 11px; font-weight: 600;
+      letter-spacing: 0.2em; text-transform: uppercase;
+      color: #06b6d4; margin-bottom: 16px;
+      display: flex; align-items: center; gap: 8px;
+    }
+    .hero-tag-dot {
+      width: 6px; height: 6px; border-radius: 50%;
+      background: #06b6d4;
+      box-shadow: 0 0 8px rgba(6, 182, 212, 0.6);
+      animation: tagDotPulse 2s ease-in-out infinite;
+    }
+    @keyframes tagDotPulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.4; }
+    }
+
+    .hero-heading {
+      font-family: 'Sora', sans-serif;
+      font-size: clamp(36px, 6vw, 72px);
+      font-weight: 700; line-height: 1.05;
+      letter-spacing: -0.03em;
+      color: var(--text-primary);
+      margin-bottom: 24px;
+      transition: color 0.5s ease;
+    }
+    .hero-heading .cyan { color: #06b6d4; }
+
+    .hero-desc {
+      font-size: clamp(15px, 1.8vw, 18px);
+      line-height: 1.7; color: var(--text-secondary);
+      max-width: 520px; margin-bottom: 36px;
+      transition: color 0.5s ease;
+    }
+
+    .hero-buttons {
+      display: flex; gap: 16px; flex-wrap: wrap;
+    }
+
+    .btn-primary {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 14px; font-weight: 600;
+      padding: 14px 32px; border-radius: 14px;
+      background: linear-gradient(135deg, #06b6d4, #0891b2);
+      color: white; border: none; cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 0 30px rgba(6, 182, 212, 0.3);
+      display: inline-flex; align-items: center; gap: 8px;
+    }
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 0 40px rgba(6, 182, 212, 0.5);
+    }
+    .btn-primary:active { transform: translateY(0) scale(0.98); }
+
+    .btn-outline {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 14px; font-weight: 600;
+      padding: 14px 32px; border-radius: 14px;
+      background: transparent;
+      color: #06b6d4; border: 1.5px solid #06b6d4;
+      cursor: pointer; transition: all 0.3s ease;
+      display: inline-flex; align-items: center; gap: 8px;
+    }
+    .btn-outline:hover {
+      background: rgba(6, 182, 212, 0.1);
+      transform: translateY(-2px);
+      box-shadow: 0 0 25px rgba(6, 182, 212, 0.2);
+    }
+    .btn-outline:active { transform: translateY(0) scale(0.98); }
+
+    @media (max-width: 1023px) {
+      .hero-container { grid-template-columns: 1fr; text-align: center; }
+      .hero-image-wrapper { order: -1; }
+      .hero-image { max-width: 340px; }
+      .hero-glow { width: 300px; height: 300px; }
+      .hero-tag { justify-content: center; }
+      .hero-desc { margin-left: auto; margin-right: auto; }
+      .hero-buttons { justify-content: center; }
+    }
+
+    /* ---------- SECTION BASE ---------- */
+    .section-wrapper {
+      max-width: 1280px; margin: 0 auto;
+      padding: 100px 24px;
+      position: relative; z-index: 1;
+    }
+
+    .section-tag {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 10px; font-weight: 600;
+      letter-spacing: 0.2em; text-transform: uppercase;
+      color: #06b6d4; margin-bottom: 12px;
+    }
+
+    .section-heading {
+      font-family: 'Sora', sans-serif;
+      font-size: clamp(28px, 4vw, 48px);
+      font-weight: 700; letter-spacing: -0.02em;
+      color: var(--text-primary);
+      margin-bottom: 16px;
+      transition: color 0.5s ease;
+    }
+
+    .section-desc {
+      font-size: clamp(15px, 1.5vw, 17px);
+      line-height: 1.7; color: var(--text-secondary);
+      max-width: 600px;
+      transition: color 0.5s ease;
+    }
+
+    /* ---------- ABOUT SECTION ---------- */
+    .about-grid {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 40px; margin-top: 60px;
+    }
+
+    .about-card {
+      background: var(--card-bg);
+      backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px);
+      border: 1px solid var(--card-border);
+      border-radius: 28px; padding: 40px;
+      transition: all 0.4s ease;
+      position: relative; overflow: hidden;
+    }
+    .about-card::before {
+      content: ''; position: absolute;
+      top: 0; left: 0; right: 0; height: 2px;
+      background: linear-gradient(90deg, transparent, #06b6d4, transparent);
+      opacity: 0; transition: opacity 0.4s ease;
+    }
+    .about-card:hover {
+      transform: translateY(-4px);
+      border-color: rgba(6, 182, 212, 0.35);
+      box-shadow: 0 20px 50px var(--card-shadow);
+    }
+    .about-card:hover::before { opacity: 1; }
+
+    .about-icon {
+      width: 52px; height: 52px; border-radius: 14px;
+      background: linear-gradient(135deg, rgba(6,182,212,0.15), rgba(34,211,238,0.05));
+      border: 1px solid rgba(6, 182, 212, 0.2);
+      display: flex; align-items: center; justify-content: center;
+      color: #06b6d4; font-size: 24px; margin-bottom: 24px;
+    }
+
+    .about-card h3 {
+      font-family: 'Sora', sans-serif;
+      font-size: 22px; font-weight: 600;
+      color: var(--text-primary); margin-bottom: 14px;
+      transition: color 0.5s ease;
+    }
+
+    .about-card p {
+      font-size: 15px; line-height: 1.75;
+      color: var(--text-secondary);
+      transition: color 0.5s ease;
+    }
+
+    .about-card p + p {
+      margin-top: 14px;
+    }
+
+    @media (max-width: 767px) {
+      .about-grid { grid-template-columns: 1fr; }
+    }
+
+    /* ---------- CAROUSEL SECTION ---------- */
+    .carousel-section {
+      position: relative;
+      z-index: 1;
+    }
+
+    .carousel-wrapper {
+      position: relative;
+      margin-top: 56px;
+    }
+
+    .carousel-ambient-glow {
+      position: absolute;
+      width: 600px; height: 300px;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      background: radial-gradient(ellipse, rgba(6,182,212,0.12), transparent 70%);
+      border-radius: 50%;
+      filter: blur(60px);
+      pointer-events: none;
+      animation: carouselGlowPulse 6s ease-in-out infinite;
+    }
+    .dark .carousel-ambient-glow {
+      background: radial-gradient(ellipse, rgba(6,182,212,0.08), transparent 70%);
+    }
+
+    @keyframes carouselGlowPulse {
+      0%, 100% { opacity: 0.6; transform: translate(-50%, -50%) scale(1); }
+      50% { opacity: 1; transform: translate(-50%, -50%) scale(1.1); }
+    }
+
+    .carousel-viewport {
+      overflow: hidden;
+      border-radius: 24px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .carousel-track {
+      display: flex;
+      will-change: transform;
+    }
+
+    .carousel-slide {
+      flex-shrink: 0;
+      position: relative;
+    }
+
+    .carousel-slide-inner {
+      padding: 0 10px;
+      position: relative;
+    }
+
+    .carousel-slide-inner img {
+      width: 100%;
+      aspect-ratio: 16 / 10;
+      object-fit: cover;
+      border-radius: 20px;
+      border: 1px solid var(--card-border);
+      transition: transform 0.5s ease, box-shadow 0.5s ease, border-color 0.5s ease;
+      box-shadow: 0 8px 32px rgba(6, 182, 212, 0.08);
+      display: block;
+    }
+
+    .carousel-slide:hover .carousel-slide-inner img {
+      transform: scale(1.04);
+      box-shadow: 0 16px 48px rgba(6, 182, 212, 0.2);
+      border-color: rgba(6, 182, 212, 0.35);
+    }
+
+    .carousel-slide-label {
+      position: absolute;
+      bottom: 22px; left: 22px;
+      padding: 8px 18px;
+      background: rgba(10, 14, 26, 0.55);
+      backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+      border: 1px solid rgba(6, 182, 212, 0.2);
+      border-radius: 10px;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 13px; font-weight: 500;
+      color: #e0f7fa;
+      opacity: 0;
+      transform: translateY(8px);
+      transition: opacity 0.4s ease, transform 0.4s ease;
+      pointer-events: none;
+      z-index: 2;
+    }
+
+    .carousel-slide:hover .carousel-slide-label {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Carousel Arrows */
+    .carousel-arrow {
+      position: absolute;
+      top: 50%; transform: translateY(-50%);
+      width: 48px; height: 48px;
+      border-radius: 50%;
+      border: 1px solid var(--card-border);
+      background: var(--card-bg);
+      backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+      color: var(--text-secondary);
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer; font-size: 24px;
+      z-index: 10;
+      transition: all 0.3s ease;
+    }
+    .carousel-arrow:hover {
+      border-color: #06b6d4;
+      color: #06b6d4;
+      box-shadow: 0 0 25px rgba(6, 182, 212, 0.3);
+      background: rgba(6, 182, 212, 0.1);
+    }
+    .carousel-arrow:active {
+      transform: translateY(-50%) scale(0.93);
+    }
+    .carousel-arrow-prev { left: -6px; }
+    .carousel-arrow-next { right: -6px; }
+
+    @media (max-width: 767px) {
+      .carousel-arrow { width: 38px; height: 38px; font-size: 20px; }
+      .carousel-arrow-prev { left: 2px; }
+      .carousel-arrow-next { right: 2px; }
+    }
+
+    @media (max-width: 480px) {
+      .carousel-arrow { width: 34px; height: 34px; font-size: 18px; }
+    }
+
+    /* Carousel Indicators */
+    .carousel-indicators {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      margin-top: 32px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .carousel-dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      border: none;
+      background: var(--text-muted);
+      opacity: 0.35;
+      cursor: pointer;
+      transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+      padding: 0;
+    }
+    .carousel-dot:hover {
+      opacity: 0.65;
+    }
+    .carousel-dot.active {
+      background: #06b6d4;
+      opacity: 1;
+      width: 28px;
+      border-radius: 4px;
+      box-shadow: 0 0 12px rgba(6, 182, 212, 0.5);
+    }
+
+    /* ---------- RESEARCH SECTION ---------- */
+    .research-grid {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 32px; margin-top: 60px;
+    }
+
+    .chart-card {
+      background: var(--card-bg);
+      backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px);
+      border: 1px solid var(--card-border);
+      border-radius: 24px; padding: 28px;
+      transition: all 0.4s ease;
+    }
+    .chart-card:hover {
+      border-color: rgba(6, 182, 212, 0.35);
+      box-shadow: 0 15px 40px var(--card-shadow);
+    }
+
+    .chart-card h3 {
+      font-family: 'Sora', sans-serif;
+      font-size: 16px; font-weight: 600;
+      color: var(--text-primary); margin-bottom: 4px;
+      transition: color 0.5s ease;
+    }
+
+    .chart-card .chart-sub {
+      font-size: 12px; color: var(--text-muted); margin-bottom: 20px;
+    }
+
+    .chart-container {
+      position: relative; height: 220px;
+    }
+
+    @media (max-width: 767px) {
+      .research-grid { grid-template-columns: 1fr; }
+    }
+
+    /* ---------- PRODUCTS SECTION ---------- */
+    .products-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      gap: 32px; margin-top: 60px;
+    }
+
+    .product-card {
+      background: var(--card-bg);
+      backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px);
+      border: 1px solid var(--card-border);
+      border-radius: 28px; padding: 32px;
+      text-align: center; position: relative;
+      overflow: hidden;
+      transition: all 0.4s ease;
+    }
+    .product-card::before {
+      content: ''; position: absolute;
+      top: -50%; left: -50%; width: 200%; height: 200%;
+      background: conic-gradient(from 0deg, transparent, rgba(6,182,212,0.08), transparent 30%);
+      animation: productGlow 6s linear infinite;
+      opacity: 0; transition: opacity 0.4s ease;
+    }
+    .product-card:hover::before { opacity: 1; }
+    .product-card:hover {
+      transform: translateY(-8px);
+      border-color: rgba(6, 182, 212, 0.4);
+      box-shadow: 0 25px 60px var(--card-shadow);
+    }
+
+    @keyframes productGlow { to { transform: rotate(360deg); } }
+
+    .product-card-inner { position: relative; z-index: 1; }
+
+    .product-img-wrapper {
+      width: 180px; height: 180px; margin: 0 auto 24px;
+      border-radius: 20px; overflow: hidden;
+      border: 1px solid var(--card-border);
+      animation: productFloat 5s ease-in-out infinite;
+    }
+
+    @keyframes productFloat {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-8px); }
+    }
+
+    .product-img-wrapper img {
+      width: 100%; height: 100%; object-fit: cover;
+    }
+
+    .product-card h3 {
+      font-family: 'Sora', sans-serif;
+      font-size: 20px; font-weight: 600;
+      color: var(--text-primary); margin-bottom: 10px;
+      transition: color 0.5s ease;
+    }
+
+    .product-card .product-desc {
+      font-size: 14px; line-height: 1.6;
+      color: var(--text-secondary); margin-bottom: 24px;
+      transition: color 0.5s ease;
+    }
+
+    .product-price {
+      font-family: 'Sora', sans-serif;
+      font-size: 22px; font-weight: 700;
+      color: #06b6d4; margin-bottom: 20px;
+    }
+
+    .btn-buy {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 13px; font-weight: 600;
+      padding: 12px 28px; border-radius: 12px;
+      background: linear-gradient(135deg, #06b6d4, #0891b2);
+      color: white; border: none; cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 0 20px rgba(6, 182, 212, 0.25);
+    }
+    .btn-buy:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 0 30px rgba(6, 182, 212, 0.45);
+    }
+
+    @media (max-width: 1023px) {
+      .products-grid { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 639px) {
+      .products-grid { grid-template-columns: 1fr; max-width: 360px; margin-left: auto; margin-right: auto; }
+    }
+
+    /* ---------- FOOTER ---------- */
+    .footer-section {
+      background: var(--footer-bg);
+      border-top: 1px solid rgba(6, 182, 212, 0.1);
+      position: relative; z-index: 1;
+      transition: background 0.5s ease;
+    }
+
+    .footer-grid {
+      display: grid; grid-template-columns: 2fr 1fr 1fr 1fr;
+      gap: 48px;
+    }
+
+    .footer-brand-desc {
+      font-size: 14px; line-height: 1.7;
+      color: #94a3b8; margin-top: 16px; max-width: 300px;
+    }
+
+    .footer-col-title {
+      font-family: 'Sora', sans-serif;
+      font-size: 13px; font-weight: 600;
+      color: #67e8f9; letter-spacing: 0.05em;
+      text-transform: uppercase; margin-bottom: 20px;
+    }
+
+    .footer-link {
+      display: block; font-size: 14px;
+      color: #94a3b8; padding: 6px 0;
+      transition: all 0.3s ease;
+    }
+    .footer-link:hover { color: #ffffff; padding-left: 4px; }
+
+    .footer-bottom {
+      border-top: 1px solid rgba(6, 182, 212, 0.08);
+      margin-top: 60px; padding-top: 24px;
+      display: flex; justify-content: space-between; align-items: center;
+      flex-wrap: wrap; gap: 16px;
+    }
+
+    .footer-copy {
+      font-size: 13px; color: #64748b;
+    }
+
+    .footer-contact {
+      display: flex; gap: 24px; flex-wrap: wrap;
+    }
+    .footer-contact a {
+      font-size: 13px; color: #94a3b8;
+      display: flex; align-items: center; gap: 6px;
+      transition: color 0.3s ease;
+    }
+    .footer-contact a:hover { color: #22d3ee; }
+
+    @media (max-width: 1023px) {
+      .footer-grid { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 639px) {
+      .footer-grid { grid-template-columns: 1fr; }
+    }
+
+    /* ---------- MODALS ---------- */
+    .modal-overlay {
+      position: fixed; inset: 0; z-index: 10003;
+      background: var(--modal-overlay);
+      backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+      display: flex; align-items: center; justify-content: center;
+      padding: 24px;
+      visibility: hidden; opacity: 0;
+      transition: visibility 0.4s ease, opacity 0.4s ease;
+    }
+    .modal-overlay.open { visibility: visible; opacity: 1; }
+
+    .modal-card {
+      background: var(--bg-secondary);
+      border: 1px solid var(--card-border);
+      border-radius: 28px;
+      width: 100%; max-width: 460px;
+      max-height: 90vh; overflow-y: auto;
+      padding: 40px;
+      transform: translateY(20px) scale(0.97);
+      transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), background 0.5s ease, border-color 0.5s ease;
+      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.3);
+    }
+    .modal-overlay.open .modal-card {
+      transform: translateY(0) scale(1);
+    }
+
+    .modal-close {
+      position: absolute; top: 16px; right: 16px;
+      width: 36px; height: 36px; border-radius: 50%;
+      border: 1px solid var(--card-border);
+      background: var(--card-bg); color: var(--text-secondary);
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer; font-size: 18px;
+      transition: all 0.3s ease;
+    }
+    .modal-close:hover { border-color: #06b6d4; color: #06b6d4; }
+
+    .modal-title {
+      font-family: 'Sora', sans-serif;
+      font-size: 24px; font-weight: 700;
+      color: var(--text-primary); margin-bottom: 8px;
+      transition: color 0.5s ease;
+    }
+
+    .modal-sub {
+      font-size: 14px; color: var(--text-muted); margin-bottom: 28px;
+    }
+
+    .input-group { margin-bottom: 18px; }
+
+    .input-label {
+      font-size: 12px; font-weight: 600;
+      color: var(--text-secondary); margin-bottom: 6px;
+      display: block; text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .input-field {
+      width: 100%; padding: 12px 16px;
+      border-radius: 12px; border: 1px solid var(--card-border);
+      background: var(--card-bg);
+      color: var(--text-primary);
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 14px;
+      transition: all 0.3s ease;
+      outline: none;
+    }
+    .input-field::placeholder { color: var(--text-muted); }
+    .input-field:focus {
+      border-color: #06b6d4;
+      box-shadow: 0 0 0 3px rgba(6, 182, 212, 0.15);
+    }
+
+    .btn-modal-submit {
+      width: 100%; padding: 14px;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 14px; font-weight: 600;
+      border-radius: 14px; border: none;
+      background: linear-gradient(135deg, #06b6d4, #0891b2);
+      color: white; cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 0 25px rgba(6, 182, 212, 0.3);
+      margin-top: 8px;
+    }
+    .btn-modal-submit:hover {
+      box-shadow: 0 0 35px rgba(6, 182, 212, 0.5);
+      transform: translateY(-1px);
+    }
+
+    .divider {
+      display: flex; align-items: center;
+      gap: 16px; margin: 24px 0;
+      color: var(--text-muted); font-size: 12px;
+    }
+    .divider::before, .divider::after {
+      content: ''; flex: 1; height: 1px;
+      background: var(--card-border);
+    }
+
+    .btn-google {
+      width: 100%; padding: 12px;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 14px; font-weight: 500;
+      border-radius: 14px;
+      border: 1px solid var(--card-border);
+      background: var(--card-bg);
+      color: var(--text-primary);
+      cursor: pointer; transition: all 0.3s ease;
+      display: flex; align-items: center; justify-content: center; gap: 10px;
+    }
+    .btn-google:hover {
+      border-color: #06b6d4;
+      box-shadow: 0 0 15px rgba(6, 182, 212, 0.15);
+    }
+
+    .product-modal-img {
+      width: 100%; height: 200px;
+      object-fit: cover; border-radius: 16px;
+      margin-bottom: 20px;
+      border: 1px solid var(--card-border);
+    }
+
+    .spec-grid {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 12px; margin: 20px 0;
+    }
+
+    .spec-item {
+      padding: 12px; border-radius: 12px;
+      background: rgba(6, 182, 212, 0.06);
+      border: 1px solid rgba(6, 182, 212, 0.1);
+    }
+
+    .spec-label {
+      font-size: 10px; font-weight: 600;
+      color: var(--text-muted); text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .spec-value {
+      font-family: 'Sora', sans-serif;
+      font-size: 14px; font-weight: 600;
+      color: var(--text-primary); margin-top: 4px;
+      transition: color 0.5s ease;
+    }
+
+    /* ---------- SCROLL REVEAL ---------- */
+    .reveal {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.7s ease-out, transform 0.7s ease-out;
+    }
+    .reveal.revealed {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .reveal-delay-1 { transition-delay: 0.1s; }
+    .reveal-delay-2 { transition-delay: 0.2s; }
+    .reveal-delay-3 { transition-delay: 0.3s; }
+    .reveal-delay-4 { transition-delay: 0.4s; }
+
+    .section-divider {
+      height: 1px; border: none;
+      background: linear-gradient(90deg, transparent, rgba(6,182,212,0.3), transparent);
+      margin: 0;
+    }
+
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb {
+      background: rgba(6, 182, 212, 0.3);
+      border-radius: 3px;
+    }
+    ::-webkit-scrollbar-thumb:hover { background: rgba(6, 182, 212, 0.5); }
+  </style>
+</head>
+
+<body>
+
+  <!-- ==================== LOADING SCREEN ==================== -->
+  <div id="loader">
+    <div class="loader-ring"></div>
+    <div class="loader-text">GodAura</div>
+    <div class="loader-sub">Devices</div>
+  </div>
+
+  <!-- ==================== CUSTOM CURSOR ==================== -->
+  <div class="cursor-dot" id="cursor-dot"></div>
+  <div class="cursor-ring" id="cursor-ring"></div>
+
+  <!-- ==================== SCROLL PROGRESS ==================== -->
+  <div id="scroll-progress"></div>
+
+  <!-- ==================== PARTICLES CANVAS ==================== -->
+  <canvas id="particles-canvas"></canvas>
+
+  <!-- ==================== AMBIENT ORBS ==================== -->
+  <div class="ambient-orb orb-1"></div>
+  <div class="ambient-orb orb-2"></div>
+  <div class="ambient-orb orb-3"></div>
+
+  <!-- ==================== NAVBAR ==================== -->
+  <nav class="navbar" id="navbar">
+    <a href="#home" class="nav-logo">
+      <div class="nav-logo-icon">
+        <iconify-icon icon="mdi:brain"></iconify-icon>
+      </div>
+      <span>GodAura</span>
+    </a>
+    <div class="nav-links">
+      <a href="#home" class="nav-link active" data-section="home">Home</a>
+      <a href="#about" class="nav-link" data-section="about">About Us</a>
+      <a href="#research" class="nav-link" data-section="research">Research</a>
+      <a href="#products" class="nav-link" data-section="products">Products</a>
+    </div>
+    <div class="nav-actions">
+      <button class="dark-toggle" id="dark-toggle" aria-label="Toggle dark mode">
+        <iconify-icon icon="mdi:weather-sunny" id="dark-icon"></iconify-icon>
+      </button>
+      <button class="btn-signin-nav" id="nav-signin">Sign In</button>
+      <button class="hamburger" id="hamburger-btn" aria-label="Open menu">
+        <iconify-icon icon="mdi:menu"></iconify-icon>
+      </button>
+    </div>
+  </nav>
+
+  <!-- ==================== MOBILE MENU ==================== -->
+  <div class="mobile-menu" id="mobile-menu">
+    <div class="mobile-menu-overlay" id="mobile-overlay"></div>
+    <div class="mobile-menu-panel">
+      <button class="mobile-menu-close" id="mobile-close" aria-label="Close menu">
+        <iconify-icon icon="mdi:close"></iconify-icon>
+      </button>
+      <div class="mobile-menu-header">
+        <div class="mobile-menu-header-logo">
+          <iconify-icon icon="mdi:brain"></iconify-icon>
+        </div>
+        <span class="mobile-menu-header-text">GodAura Devices</span>
+      </div>
+      <div class="mobile-menu-section-label">Navigate</div>
+      <a href="#home" class="mobile-nav-link" data-mobile-link>
+        <iconify-icon icon="mdi:home-outline"></iconify-icon> Home
+      </a>
+      <a href="#about" class="mobile-nav-link" data-mobile-link>
+        <iconify-icon icon="mdi:information-outline"></iconify-icon> About Us
+      </a>
+      <a href="#research" class="mobile-nav-link" data-mobile-link>
+        <iconify-icon icon="mdi:chart-line"></iconify-icon> Research
+      </a>
+      <a href="#products" class="mobile-nav-link" data-mobile-link>
+        <iconify-icon icon="mdi:shopping-outline"></iconify-icon> Products
+      </a>
+      <div class="mobile-menu-section-label">Explore</div>
+      <a href="learn-more.html" class="mobile-nav-link" data-mobile-link>
+        <iconify-icon icon="mdi:book-open-page-variant-outline"></iconify-icon> Learn More
+      </a>
+      <a href="all-researches.html" class="mobile-nav-link" data-mobile-link>
+        <iconify-icon icon="mdi:flask-outline"></iconify-icon> View All Researches
+      </a>
+      <a href="achievements.html" class="mobile-nav-link" data-mobile-link>
+        <iconify-icon icon="mdi:trophy-outline"></iconify-icon> Achievements
+      </a>
+      <button class="btn-signin-mobile" id="mobile-signin">Sign In</button>
+    </div>
+  </div>
+
+  <!-- ==================== SIGN IN MODAL ==================== -->
+  <div class="modal-overlay" id="signin-modal">
+    <div class="modal-card" style="position:relative;">
+      <button class="modal-close" id="signin-close" aria-label="Close">
+        <iconify-icon icon="mdi:close"></iconify-icon>
+      </button>
+      <div style="text-align:center; margin-bottom:8px;">
+        <div style="width:48px;height:48px;border-radius:14px;background:linear-gradient(135deg,#06b6d4,#0891b2);display:inline-flex;align-items:center;justify-content:center;color:white;font-size:24px;box-shadow:0 0 25px rgba(6,182,212,0.4);">
+          <iconify-icon icon="mdi:brain"></iconify-icon>
+        </div>
+      </div>
+      <h2 class="modal-title" style="text-align:center;">Welcome Back</h2>
+      <p class="modal-sub" style="text-align:center;">Sign in to your GodAura account</p>
+      <div class="input-group">
+        <label class="input-label">Email Address</label>
+        <input type="email" class="input-field" placeholder="you@example.com">
+      </div>
+      <div class="input-group">
+        <label class="input-label">Password</label>
+        <input type="password" class="input-field" placeholder="Enter your password">
+      </div>
+      <div class="input-group">
+        <label class="input-label">Confirmation Code</label>
+        <input type="text" class="input-field" placeholder="6-digit code">
+      </div>
+      <button class="btn-modal-submit">Sign In</button>
+      <div class="divider">or</div>
+      <button class="btn-google">
+        <iconify-icon icon="mdi:google" style="font-size:18px;"></iconify-icon>
+        Sign in with Google
+      </button>
+    </div>
+  </div>
+
+  <!-- ==================== PRODUCT DETAIL MODAL ==================== -->
+  <div class="modal-overlay" id="product-modal">
+    <div class="modal-card" style="position:relative; max-width:520px;">
+      <button class="modal-close" id="product-modal-close" aria-label="Close">
+        <iconify-icon icon="mdi:close"></iconify-icon>
+      </button>
+      <img id="pm-image" class="product-modal-img" src="" alt="Product">
+      <h2 class="modal-title" id="pm-title"></h2>
+      <p style="font-size:14px;line-height:1.7;color:var(--text-secondary);margin-bottom:8px;" id="pm-desc"></p>
+      <div class="spec-grid" id="pm-specs"></div>
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-top:20px;">
+        <div>
+          <span style="font-size:12px;color:var(--text-muted);">Price</span>
+          <div class="product-price" id="pm-price" style="margin-bottom:0;"></div>
+        </div>
+        <button class="btn-buy" style="padding:14px 32px;">Add to Cart</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== MAIN CONTENT ==================== -->
+  <main>
+
+    <!-- ========== HOME / HERO ========== -->
+    <section id="home" class="hero-section">
+      <div class="hero-container">
+        <div class="hero-image-wrapper">
+          <div class="hero-glow"></div>
+          <img class="hero-image" src="https://picsum.photos/seed/godaura-meditate/600/800.jpg" alt="Person meditating with GodAura headband">
+        </div>
+        <div>
+          <div class="hero-tag">
+            <span class="hero-tag-dot"></span>
+            AI-Powered Meditation Technology
+          </div>
+          <h1 class="hero-heading">Elevate Your<br><span class="cyan">Consciousness</span></h1>
+          <p class="hero-desc">GodAura Devices creates wearable meditation technology that blends neuroscience, calming vibrations, and modern design. Our goal is to make meditation easier for people struggling with stress, overthinking, anxiety, insomnia, and mental exhaustion.</p>
+          <div class="hero-buttons">
+            <button class="btn-primary" id="hero-signin">
+              <iconify-icon icon="mdi:account-circle-outline"></iconify-icon> Sign In
+            </button>
+            <a href="learn-more.html" class="btn-outline">
+              Learn More <iconify-icon icon="mdi:arrow-right"></iconify-icon>
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <hr class="section-divider">
+
+    <!-- ========== ABOUT US ========== -->
+    <section id="about">
+      <div class="section-wrapper">
+        <div class="reveal">
+          <div class="section-tag">About Us</div>
+          <h2 class="section-heading">Where Neuroscience<br>Meets <span style="color:#06b6d4;">Stillness</span></h2>
+          <p class="section-desc">GodAura Devices was born from a singular vision: to make the ancient art of meditation measurable, personal, and profoundly effective through modern technology.</p>
+        </div>
+        <div class="about-grid">
+          <div class="about-card reveal reveal-delay-1">
+            <div class="about-icon"><iconify-icon icon="mdi:brain"></iconify-icon></div>
+            <h3>Our Mission</h3>
+            <p>GodAura Devices was founded in 2022 with one idea — meditation should be easier for everyone.</p>
+            <p>After seeing how many people struggled with stress, anxiety, insomnia, and constant overthinking, we wanted to create something that could genuinely help. Meditation has always been powerful, but many people find it difficult to quiet their minds and fully relax.</p>
+            <p>That inspired the idea behind GodAura: a wearable device that uses carefully tuned rhythmic vibrations to help guide the brain into a calmer, more focused state. At first, the idea felt uncertain, but after research and testing, the results were clear — vibration patterns could genuinely help people relax, focus, and meditate more effectively.</p>
+            <p>Today, GodAura combines wellness, technology, and human-centered design to create meditation tools built for modern life.</p>
+          </div>
+          <div class="about-card reveal reveal-delay-2">
+            <div class="about-icon"><iconify-icon icon="mdi:chip"></iconify-icon></div>
+            <h3>Science Meets Serenity</h3>
+            <p>Every GodAura device is carefully designed to help people feel relief from stress, anxiety, insomnia, overthinking, and mental fatigue through guided vibration-based meditation.</p>
+            <p>Before launching any new model, our devices go through testing and real-user trials to study relaxation levels, sleep improvement, focus, and overall mental wellness progress. We continuously improve our technology to create a calmer, more effective meditation experience for everyday life.</p>
+          </div>
+          <div class="about-card reveal reveal-delay-3">
+            <div class="about-icon"><iconify-icon icon="mdi:eye-outline"></iconify-icon></div>
+            <h3>Our Vision</h3>
+            <p>We envision a world where mental wellness is not a luxury but a given. A future where anyone — from a seasoned monk to a curious beginner — can access the same depth of meditative insight. GodAura is building that future, one brainwave at a time, making advanced contemplative technology available to all.</p>
+          </div>
+          <div class="about-card reveal reveal-delay-4">
+            <div class="about-icon"><iconify-icon icon="mdi:heart-pulse"></iconify-icon></div>
+            <h3>Human Optimization</h3>
+            <p>Meditation is the foundation, but the ripple effects touch everything — sleep quality, emotional resilience, cognitive performance, and physical health. GodAura devices are designed to optimize the whole human, providing insights across every dimension of your wellbeing journey through continuous, non-invasive monitoring.</p>
+          </div>
+        </div>
+        <div style="text-align:center; margin-top:48px;" class="reveal">
+          <a href="achievements.html" class="btn-outline" style="display:inline-flex;">
+            View Our Past Achievements <iconify-icon icon="mdi:trophy-outline"></iconify-icon>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <hr class="section-divider">
+
+    <!-- ========== IMAGE CAROUSEL SECTION ========== -->
+    <section id="gallery" class="carousel-section">
+      <div class="section-wrapper">
+        <div class="reveal">
+          <div class="section-tag">Visual Experience</div>
+          <h2 class="section-heading">Inside The <span style="color:#06b6d4;">GodAura</span> Experience</h2>
+          <p class="section-desc">Step into a world of serene technology — where every vibration guides you closer to stillness, and every moment of calm is amplified by intelligent design. Explore the visual essence of mindful living.</p>
+        </div>
+
+        <div class="carousel-wrapper reveal reveal-delay-2">
+          <!-- Ambient glow behind carousel -->
+          <div class="carousel-ambient-glow"></div>
+
+          <!-- Carousel viewport -->
+          <div class="carousel-viewport" id="carousel-viewport">
+            <div class="carousel-track" id="carousel-track">
+
+              <!-- === Clone slides (last 3) for infinite loop === -->
+              <div class="carousel-slide" data-clone="start">
+                <div class="carousel-slide-inner">
+                  <img src="https://picsum.photos/seed/godaura-gallery-3/800/500.jpg" alt="Deep rest and recovery">
+                  <div class="carousel-slide-label">Deep Rest</div>
+                </div>
+              </div>
+              <div class="carousel-slide" data-clone="start">
+                <div class="carousel-slide-inner">
+                  <img src="https://picsum.photos/seed/godaura-gallery-4/800/500.jpg" alt="Wellness technology">
+                  <div class="carousel-slide-label">Wellness Tech</div>
+                </div>
+              </div>
+              <div class="carousel-slide" data-clone="start">
+                <div class="carousel-slide-inner">
+                  <img src="https://picsum.photos/seed/godaura-gallery-5/800/500.jpg" alt="Sleep enhancement">
+                  <div class="carousel-slide-label">Sleep Enhancement</div>
+                </div>
+              </div>
+
+              <!-- === Real slides (6) === -->
+              <div class="carousel-slide">
+                <div class="carousel-slide-inner">
+                  <img src="https://picsum.photos/seed/godaura-gallery-0/800/500.jpg" alt="Guided meditation session">
+                  <div class="carousel-slide-label">Guided Meditation</div>
+                </div>
+              </div>
+              <div class="carousel-slide">
+                <div class="carousel-slide-inner">
+                  <img src="https://picsum.photos/seed/godaura-gallery-1/800/500.jpg" alt="Calm mindfulness practice">
+                  <div class="carousel-slide-label">Mindful Calm</div>
+                </div>
+              </div>
+              <div class="carousel-slide">
+                <div class="carousel-slide-inner">
+                  <img src="https://picsum.photos/seed/godaura-gallery-2/800/500.jpg" alt="Relaxation and breathing">
+                  <div class="carousel-slide-label">Relaxation</div>
+                </div>
+              </div>
+              <div class="carousel-slide">
+                <div class="carousel-slide-inner">
+                  <img src="https://picsum.photos/seed/godaura-gallery-3/800/500.jpg" alt="Deep rest and recovery">
+                  <div class="carousel-slide-label">Deep Rest</div>
+                </div>
+              </div>
+              <div class="carousel-slide">
+                <div class="carousel-slide-inner">
+                  <img src="https://picsum.photos/seed/godaura-gallery-4/800/500.jpg" alt="Wellness technology">
+                  <div class="carousel-slide-label">Wellness Tech</div>
+                </div>
+              </div>
+              <div class="carousel-slide">
+                <div class="carousel-slide-inner">
+                  <img src="https://picsum.photos/seed/godaura-gallery-5/800/500.jpg" alt="Sleep enhancement">
+                  <div class="carousel-slide-label">Sleep Enhancement</div>
+                </div>
+              </div>
+
+              <!-- === Clone slides (first 3) for infinite loop === -->
+              <div class="carousel-slide" data-clone="end">
+                <div class="carousel-slide-inner">
+                  <img src="https://picsum.photos/seed/godaura-gallery-0/800/500.jpg" alt="Guided meditation session">
+                  <div class="carousel-slide-label">Guided Meditation</div>
+                </div>
+              </div>
+              <div class="carousel-slide" data-clone="end">
+                <div class="carousel-slide-inner">
+                  <img src="https://picsum.photos/seed/godaura-gallery-1/800/500.jpg" alt="Calm mindfulness practice">
+                  <div class="carousel-slide-label">Mindful Calm</div>
+                </div>
+              </div>
+              <div class="carousel-slide" data-clone="end">
+                <div class="carousel-slide-inner">
+                  <img src="https://picsum.photos/seed/godaura-gallery-2/800/500.jpg" alt="Relaxation and breathing">
+                  <div class="carousel-slide-label">Relaxation</div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+          <!-- Navigation Arrows -->
+          <button class="carousel-arrow carousel-arrow-prev" id="carousel-prev" aria-label="Previous slide">
+            <iconify-icon icon="mdi:chevron-left"></iconify-icon>
+          </button>
+          <button class="carousel-arrow carousel-arrow-next" id="carousel-next" aria-label="Next slide">
+            <iconify-icon icon="mdi:chevron-right"></iconify-icon>
+          </button>
+
+          <!-- Indicators -->
+          <div class="carousel-indicators" id="carousel-indicators"></div>
+        </div>
+      </div>
+    </section>
+
+    <hr class="section-divider">
+
+    <!-- ========== RESEARCH ========== -->
+    <section id="research">
+      <div class="section-wrapper">
+        <div class="reveal">
+          <div class="section-tag">Research</div>
+          <h2 class="section-heading">Science-Backed <span style="color:#06b6d4;">Results</span></h2>
+          <p class="section-desc">Our clinical studies demonstrate measurable improvements across key wellness metrics. Real data, real impact.</p>
+        </div>
+        <div class="research-grid">
+          <div class="chart-card reveal reveal-delay-1">
+            <h3>Stress Reduction</h3>
+            <p class="chart-sub">Cortisol levels over 8 weeks of use</p>
+            <div class="chart-container"><canvas id="chart-stress"></canvas></div>
+          </div>
+          <div class="chart-card reveal reveal-delay-2">
+            <h3>Sleep Improvement</h3>
+            <p class="chart-sub">Sleep quality scores — monthly comparison</p>
+            <div class="chart-container"><canvas id="chart-sleep"></canvas></div>
+          </div>
+          <div class="chart-card reveal reveal-delay-3">
+            <h3>Focus Tracking</h3>
+            <p class="chart-sub">Average focus duration per session</p>
+            <div class="chart-container"><canvas id="chart-focus"></canvas></div>
+          </div>
+          <div class="chart-card reveal reveal-delay-4">
+            <h3>Meditation Consistency</h3>
+            <p class="chart-sub">Multi-dimensional practice metrics</p>
+            <div class="chart-container"><canvas id="chart-consistency"></canvas></div>
+          </div>
+        </div>
+        <div style="text-align:center; margin-top:48px;" class="reveal">
+          <a href="all-researches.html" class="btn-outline" style="display:inline-flex;">
+            View All Researches <iconify-icon icon="mdi:chart-box-outline"></iconify-icon>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <hr class="section-divider">
+
+    <!-- ========== PRODUCTS ========== -->
+    <section id="products">
+      <div class="section-wrapper">
+        <div class="reveal">
+          <div class="section-tag">Products</div>
+          <h2 class="section-heading">Choose Your <span style="color:#06b6d4;">Path</span></h2>
+          <p class="section-desc">Three tiers of meditation technology, each crafted for a different depth of practice.</p>
+        </div>
+        <div class="products-grid">
+          <div class="product-card reveal reveal-delay-1">
+            <div class="product-card-inner">
+              <div class="product-img-wrapper" style="animation-delay: 0s;">
+                <img src="https://picsum.photos/seed/godaura-lite/400/400.jpg" alt="GodAura Lite">
+              </div>
+              <h3>GodAura Lite</h3>
+              <p class="product-desc">Perfect for beginners. Essential EEG tracking with guided meditations and sleep insights.</p>
+              <div class="product-price">$199</div>
+              <button class="btn-buy" data-product="0">View Details</button>
+            </div>
+          </div>
+          <div class="product-card reveal reveal-delay-2">
+            <div class="product-card-inner">
+              <div class="product-img-wrapper" style="animation-delay: 0.5s;">
+                <img src="https://picsum.photos/seed/godaura-pro/400/400.jpg" alt="GodAura Pro">
+              </div>
+              <h3>GodAura Pro</h3>
+              <p class="product-desc">For dedicated practitioners. Advanced brainwave mapping, AI coaching, and haptic feedback.</p>
+              <div class="product-price">$349</div>
+              <button class="btn-buy" data-product="1">View Details</button>
+            </div>
+          </div>
+          <div class="product-card reveal reveal-delay-3">
+            <div class="product-card-inner">
+              <div class="product-img-wrapper" style="animation-delay: 1s;">
+                <img src="https://picsum.photos/seed/godaura-elite/400/400.jpg" alt="GodAura Elite">
+              </div>
+              <h3>GodAura Elite</h3>
+              <p class="product-desc">The ultimate meditation companion. Full-spectrum EEG, neuro-adaptive sessions, and premium materials.</p>
+              <div class="product-price">$549</div>
+              <button class="btn-buy" data-product="2">View Details</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ==================== FOOTER ==================== -->
+  <footer class="footer-section">
+    <div class="section-wrapper" style="padding-top:80px; padding-bottom:40px;">
+      <div class="footer-grid">
+        <div>
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:4px;">
+            <div style="width:32px;height:32px;border-radius:8px;background:linear-gradient(135deg,#06b6d4,#22d3ee);display:flex;align-items:center;justify-content:center;color:white;font-size:16px;box-shadow:0 0 15px rgba(6,182,212,0.4);">
+              <iconify-icon icon="mdi:brain"></iconify-icon>
+            </div>
+            <span style="font-family:'Sora',sans-serif;font-weight:700;font-size:18px;color:#f0fdfa;">GodAura Devices</span>
+          </div>
+          <p class="footer-brand-desc">Pioneering the intersection of neuroscience and meditation. Empowering minds, one brainwave at a time.</p>
+        </div>
+        <div>
+          <div class="footer-col-title">Navigate</div>
+          <a href="#home" class="footer-link">Home</a>
+          <a href="#about" class="footer-link">About Us</a>
+          <a href="#research" class="footer-link">Research</a>
+          <a href="#products" class="footer-link">Products</a>
+        </div>
+        <div>
+          <div class="footer-col-title">Explore</div>
+          <a href="learn-more.html" class="footer-link">Learn More</a>
+          <a href="achievements.html" class="footer-link">Achievements</a>
+          <a href="all-researches.html" class="footer-link">All Researches</a>
+        </div>
+        <div>
+          <div class="footer-col-title">Account</div>
+          <a href="#" class="footer-link" id="footer-login">Login</a>
+          <a href="#" class="footer-link" id="footer-signin">Sign In</a>
+          <a href="#" class="footer-link">Download App</a>
+          <a href="#products" class="footer-link">Buy Products</a>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <div class="footer-contact">
+          <a href="mailto:hello@godaura.com"><iconify-icon icon="mdi:email-outline"></iconify-icon> hello@godaura.com</a>
+          <a href="tel:+18005551234"><iconify-icon icon="mdi:phone-outline"></iconify-icon> +1 (800) 555-1234</a>
+        </div>
+        <div class="footer-copy">© 2022 GodAura Devices. All rights reserved.™</div>
+      </div>
+    </div>
+  </footer>
+
+
+  <!-- ===================== JAVASCRIPT ===================== -->
+  <script>
+    /* ================================================
+       GODAURA DEVICES — Main JavaScript
+       ================================================ */
+
+    // ---- PRODUCT DATA ----
+    const products = [
+      {
+        name: "GodAura Lite", price: "$199",
+        image: "https://picsum.photos/seed/godaura-lite/600/400.jpg",
+        desc: "The perfect entry point into AI-powered meditation. GodAura Lite features a streamlined 3-sensor EEG array, guided session library with 100+ meditations, and essential sleep tracking — all in a lightweight, comfortable design.",
+        specs: [
+          { label: "Battery", value: "8 hours" }, { label: "Sensors", value: "3-Channel EEG" },
+          { label: "Connectivity", value: "Bluetooth 5.2" }, { label: "Weight", value: "42g" },
+          { label: "Sessions", value: "100+ Guided" }, { label: "Water Resist", value: "IPX4" }
+        ]
+      },
+      {
+        name: "GodAura Pro", price: "$349",
+        image: "https://picsum.photos/seed/godaura-pro/600/400.jpg",
+        desc: "Built for dedicated practitioners who demand deeper insight. GodAura Pro adds a 7-sensor EEG array, real-time brainwave mapping, AI-powered meditation coaching, and gentle haptic feedback to guide you back when the mind wanders.",
+        specs: [
+          { label: "Battery", value: "12 hours" }, { label: "Sensors", value: "7-Channel EEG" },
+          { label: "Connectivity", value: "Bluetooth 5.3" }, { label: "Weight", value: "38g" },
+          { label: "AI Coach", value: "Real-time" }, { label: "Haptic", value: "Gentle Pulse" }
+        ]
+      },
+      {
+        name: "GodAura Elite", price: "$549",
+        image: "https://picsum.photos/seed/godaura-elite/600/400.jpg",
+        desc: "The ultimate meditation companion. GodAura Elite features a full-spectrum 12-sensor EEG array, neuro-adaptive sessions that evolve with your practice, premium titanium frame, and exclusive access to the GodAura Masterclass community.",
+        specs: [
+          { label: "Battery", value: "16 hours" }, { label: "Sensors", value: "12-Channel EEG" },
+          { label: "Connectivity", value: "BT 5.3 + WiFi" }, { label: "Weight", value: "35g" },
+          { label: "Frame", value: "Titanium" }, { label: "Access", value: "Masterclass" }
+        ]
+      }
+    ];
+
+
+    // ---- LOADING SCREEN ----
+    window.addEventListener('load', () => {
+      setTimeout(() => { document.getElementById('loader').classList.add('hidden'); }, 2200);
+    });
+
+
+    // ---- DARK MODE ----
+    const darkToggle = document.getElementById('dark-toggle');
+    const darkIcon = document.getElementById('dark-icon');
+    const htmlEl = document.documentElement;
+
+    function setDarkMode(isDark) {
+      if (isDark) {
+        htmlEl.classList.add('dark');
+        darkIcon.setAttribute('icon', 'mdi:weather-night');
+      } else {
+        htmlEl.classList.remove('dark');
+        darkIcon.setAttribute('icon', 'mdi:weather-sunny');
+      }
+      localStorage.setItem('godaura-dark', isDark);
+      if (typeof initCharts === 'function') initCharts();
+    }
+
+    const savedDark = localStorage.getItem('godaura-dark');
+    if (savedDark === 'true') { setDarkMode(true); }
+    else if (savedDark === null && window.matchMedia('(prefers-color-scheme: dark)').matches) { setDarkMode(true); }
+
+    darkToggle.addEventListener('click', () => { setDarkMode(!htmlEl.classList.contains('dark')); });
+
+
+    // ---- NAVBAR SCROLL EFFECT ----
+    const navbar = document.getElementById('navbar');
+    window.addEventListener('scroll', () => { navbar.classList.toggle('scrolled', window.scrollY > 50); });
+
+
+    // ---- ACTIVE SECTION HIGHLIGHTING ----
+    const sections = document.querySelectorAll('section[id]');
+    const navLinks = document.querySelectorAll('.nav-link[data-section]');
+
+    const sectionObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          navLinks.forEach(link => { link.classList.toggle('active', link.dataset.section === entry.target.id); });
+        }
+      });
+    }, { threshold: 0.3, rootMargin: '-80px 0px -40% 0px' });
+    sections.forEach(section => sectionObserver.observe(section));
+
+
+    // ---- MOBILE MENU ----
+    const mobileMenu = document.getElementById('mobile-menu');
+    const hamburgerBtn = document.getElementById('hamburger-btn');
+    const mobileClose = document.getElementById('mobile-close');
+    const mobileOverlay = document.getElementById('mobile-overlay');
+    const mobileLinks = document.querySelectorAll('[data-mobile-link]');
+
+    function openMobileMenu() { mobileMenu.classList.add('open'); }
+    function closeMobileMenu() { mobileMenu.classList.remove('open'); }
+
+    hamburgerBtn.addEventListener('click', openMobileMenu);
+    mobileClose.addEventListener('click', closeMobileMenu);
+    mobileOverlay.addEventListener('click', closeMobileMenu);
+    mobileLinks.forEach(link => link.addEventListener('click', closeMobileMenu));
+
+
+    // ---- SIGN IN MODAL ----
+    const signinModal = document.getElementById('signin-modal');
+    const signinClose = document.getElementById('signin-close');
+
+    function openSignin() { signinModal.classList.add('open'); }
+    function closeSignin() { signinModal.classList.remove('open'); }
+
+    document.getElementById('nav-signin').addEventListener('click', openSignin);
+    document.getElementById('hero-signin').addEventListener('click', openSignin);
+    document.getElementById('mobile-signin').addEventListener('click', () => { closeMobileMenu(); openSignin(); });
+    document.getElementById('footer-login').addEventListener('click', (e) => { e.preventDefault(); openSignin(); });
+    document.getElementById('footer-signin').addEventListener('click', (e) => { e.preventDefault(); openSignin(); });
+    signinClose.addEventListener('click', closeSignin);
+    signinModal.addEventListener('click', (e) => { if (e.target === signinModal) closeSignin(); });
+
+
+    // ---- PRODUCT MODAL ----
+    const productModal = document.getElementById('product-modal');
+    const productModalClose = document.getElementById('product-modal-close');
+
+    function openProductModal(index) {
+      const p = products[index];
+      document.getElementById('pm-image').src = p.image;
+      document.getElementById('pm-title').textContent = p.name;
+      document.getElementById('pm-desc').textContent = p.desc;
+      document.getElementById('pm-price').textContent = p.price;
+      document.getElementById('pm-specs').innerHTML = p.specs.map(s =>
+        `<div class="spec-item"><div class="spec-label">${s.label}</div><div class="spec-value">${s.value}</div></div>`
+      ).join('');
+      productModal.classList.add('open');
+    }
+    function closeProductModal() { productModal.classList.remove('open'); }
+
+    document.querySelectorAll('[data-product]').forEach(btn => {
+      btn.addEventListener('click', () => openProductModal(parseInt(btn.dataset.product)));
+    });
+    productModalClose.addEventListener('click', closeProductModal);
+    productModal.addEventListener('click', (e) => { if (e.target === productModal) closeProductModal(); });
+
+
+    // ---- SCROLL PROGRESS ----
+    const scrollProgress = document.getElementById('scroll-progress');
+    window.addEventListener('scroll', () => {
+      const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+      scrollProgress.style.width = (docHeight > 0 ? (window.scrollY / docHeight) * 100 : 0) + '%';
+    });
+
+
+    // ---- SCROLL REVEAL ----
+    const revealElements = document.querySelectorAll('.reveal');
+    const revealObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('revealed'); });
+    }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+    revealElements.forEach(el => revealObserver.observe(el));
+
+
+    // ---- CUSTOM CURSOR ----
+    const cursorDot = document.getElementById('cursor-dot');
+    const cursorRing = document.getElementById('cursor-ring');
+    let cursorX = 0, cursorY = 0, ringX = 0, ringY = 0;
+
+    document.addEventListener('mousemove', (e) => {
+      cursorX = e.clientX; cursorY = e.clientY;
+      cursorDot.style.left = cursorX - 4 + 'px';
+      cursorDot.style.top = cursorY - 4 + 'px';
+    });
+
+    function animateCursorRing() {
+      ringX += (cursorX - ringX) * 0.15;
+      ringY += (cursorY - ringY) * 0.15;
+      cursorRing.style.left = ringX - 18 + 'px';
+      cursorRing.style.top = ringY - 18 + 'px';
+      requestAnimationFrame(animateCursorRing);
+    }
+    animateCursorRing();
+
+    document.querySelectorAll('a, button, .btn-buy, .btn-primary, .btn-outline, .nav-link, .dark-toggle, .hamburger, .product-card, .about-card, .chart-card, .mobile-nav-link, .carousel-arrow, .carousel-dot, .carousel-slide').forEach(el => {
+      el.addEventListener('mouseenter', () => {
+        cursorRing.style.width = '50px'; cursorRing.style.height = '50px';
+        cursorRing.style.borderColor = 'rgba(6, 182, 212, 0.7)';
+        cursorDot.style.transform = 'scale(1.5)';
+      });
+      el.addEventListener('mouseleave', () => {
+        cursorRing.style.width = '36px'; cursorRing.style.height = '36px';
+        cursorRing.style.borderColor = 'rgba(6, 182, 212, 0.5)';
+        cursorDot.style.transform = 'scale(1)';
+      });
+    });
+
+
+    // ---- PARTICLES ----
+    const particlesCanvas = document.getElementById('particles-canvas');
+    const pCtx = particlesCanvas.getContext('2d');
+    let particles = [];
+
+    function resizeParticles() {
+      particlesCanvas.width = window.innerWidth;
+      particlesCanvas.height = window.innerHeight;
+    }
+    resizeParticles();
+    window.addEventListener('resize', resizeParticles);
+
+    class Particle {
+      constructor() { this.reset(); }
+      reset() {
+        this.x = Math.random() * particlesCanvas.width;
+        this.y = Math.random() * particlesCanvas.height;
+        this.size = Math.random() * 2 + 0.5;
+        this.speedX = (Math.random() - 0.5) * 0.3;
+        this.speedY = -Math.random() * 0.4 - 0.1;
+        this.opacity = Math.random() * 0.4 + 0.1;
+        this.life = Math.random() * 300 + 200;
+        this.maxLife = this.life;
+      }
+      update() {
+        this.x += this.speedX; this.y += this.speedY; this.life--;
+        this.opacity = (this.life / this.maxLife) * 0.35;
+        if (this.life <= 0 || this.y < -10 || this.x < -10 || this.x > particlesCanvas.width + 10) {
+          this.reset(); this.y = particlesCanvas.height + 10;
+        }
+      }
+      draw() {
+        pCtx.beginPath();
+        pCtx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+        pCtx.fillStyle = `rgba(6, 182, 212, ${this.opacity})`;
+        pCtx.fill();
+      }
+    }
+
+    const particleCount = Math.min(60, Math.floor(window.innerWidth / 20));
+    for (let i = 0; i < particleCount; i++) particles.push(new Particle());
+
+    function animateParticles() {
+      pCtx.clearRect(0, 0, particlesCanvas.width, particlesCanvas.height);
+      particles.forEach(p => { p.update(); p.draw(); });
+      requestAnimationFrame(animateParticles);
+    }
+    animateParticles();
+
+
+    // ---- CHARTS ----
+    let chartInstances = {};
+
+    function initCharts() {
+      const isDark = htmlEl.classList.contains('dark');
+      const gridColor = isDark ? 'rgba(148, 163, 184, 0.1)' : 'rgba(6, 182, 212, 0.08)';
+      const textColor = isDark ? '#94a3b8' : '#64748b';
+
+      const defaultOptions = {
+        responsive: true, maintainAspectRatio: false,
+        plugins: { legend: { display: false } },
+        scales: {
+          x: { grid: { color: gridColor, drawBorder: false }, ticks: { color: textColor, font: { family: 'Space Grotesk', size: 11 } } },
+          y: { grid: { color: gridColor, drawBorder: false }, ticks: { color: textColor, font: { family: 'Space Grotesk', size: 11 } } }
+        },
+        elements: { point: { radius: 3, hoverRadius: 6 }, line: { tension: 0.4, borderWidth: 2 } }
+      };
+
+      Object.values(chartInstances).forEach(c => c.destroy());
+      chartInstances = {};
+
+      chartInstances.stress = new Chart(document.getElementById('chart-stress'), {
+        type: 'line',
+        data: {
+          labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4', 'Week 5', 'Week 6', 'Week 7', 'Week 8'],
+          datasets: [{ label: 'Cortisol (nmol/L)', data: [22.4, 20.1, 18.7, 16.3, 14.8, 13.2, 11.9, 10.5], borderColor: '#06b6d4', backgroundColor: isDark ? 'rgba(6,182,212,0.1)' : 'rgba(6,182,212,0.08)', fill: true, pointBackgroundColor: '#06b6d4' }]
+        },
+        options: { ...defaultOptions }
+      });
+
+      chartInstances.sleep = new Chart(document.getElementById('chart-sleep'), {
+        type: 'bar',
+        data: {
+          labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+          datasets: [{ label: 'Sleep Score', data: [52, 58, 65, 72, 78, 84], backgroundColor: ['rgba(6,182,212,0.5)','rgba(6,182,212,0.55)','rgba(6,182,212,0.6)','rgba(6,182,212,0.7)','rgba(6,182,212,0.8)','rgba(6,182,212,0.9)'], borderRadius: 6, borderSkipped: false }]
+        },
+        options: { ...defaultOptions, elements: { ...defaultOptions.elements, line: undefined } }
+      });
+
+      chartInstances.focus = new Chart(document.getElementById('chart-focus'), {
+        type: 'line',
+        data: {
+          labels: ['Day 1', 'Day 5', 'Day 10', 'Day 15', 'Day 20', 'Day 25', 'Day 30'],
+          datasets: [{ label: 'Focus Duration (min)', data: [8, 12, 18, 24, 29, 35, 42], borderColor: '#22d3ee', backgroundColor: isDark ? 'rgba(34,211,238,0.08)' : 'rgba(34,211,238,0.06)', fill: true, pointBackgroundColor: '#22d3ee' }]
+        },
+        options: { ...defaultOptions }
+      });
+
+      chartInstances.consistency = new Chart(document.getElementById('chart-consistency'), {
+        type: 'radar',
+        data: {
+          labels: ['Frequency', 'Duration', 'Depth', 'Consistency', 'Recovery'],
+          datasets: [
+            { label: 'Before', data: [40, 35, 30, 45, 38], borderColor: 'rgba(148,163,184,0.5)', backgroundColor: 'rgba(148,163,184,0.08)', pointBackgroundColor: 'rgba(148,163,184,0.6)', borderWidth: 1.5 },
+            { label: 'After 8 Weeks', data: [82, 78, 85, 80, 76], borderColor: '#06b6d4', backgroundColor: isDark ? 'rgba(6,182,212,0.12)' : 'rgba(6,182,212,0.08)', pointBackgroundColor: '#06b6d4', borderWidth: 2 }
+          ]
+        },
+        options: {
+          responsive: true, maintainAspectRatio: false,
+          plugins: { legend: { display: true, position: 'bottom', labels: { color: textColor, font: { family: 'Space Grotesk', size: 11 }, boxWidth: 12, padding: 12 } } },
+          scales: { r: { grid: { color: gridColor }, angleLines: { color: gridColor }, ticks: { display: false }, pointLabels: { color: textColor, font: { family: 'Space Grotesk', size: 11 } } } },
+          elements: { line: { tension: 0.3, borderWidth: 2 }, point: { radius: 3, hoverRadius: 5 } }
+        }
+      });
+    }
+    setTimeout(initCharts, 300);
+
+
+    // ---- IMAGE CAROUSEL ----
+    (function() {
+      const track = document.getElementById('carousel-track');
+      const viewport = document.getElementById('carousel-viewport');
+      const slides = track.querySelectorAll('.carousel-slide');
+      const totalReal = 6;
+      const cloneCount = 3;
+      let currentIndex = cloneCount; // start at first real slide
+      let isTransitioning = false;
+      let autoPlayTimer = null;
+      let slideWidth = 0;
+
+      function getVisibleCount() {
+        if (window.innerWidth >= 1024) return 3;
+        if (window.innerWidth >= 640) return 2;
+        return 1;
+      }
+
+      function updateLayout() {
+        const containerWidth = viewport.offsetWidth;
+        const visible = getVisibleCount();
+        slideWidth = containerWidth / visible;
+        slides.forEach(s => { s.style.width = slideWidth + 'px'; });
+      }
+
+      function goTo(index, animate) {
+        if (typeof animate === 'undefined') animate = true;
+        if (isTransitioning && animate) return;
+
+        currentIndex = index;
+        const offset = currentIndex * slideWidth;
+
+        if (animate) {
+          track.style.transition = 'transform 0.65s cubic-bezier(0.25, 0.1, 0.25, 1)';
+          isTransitioning = true;
+        } else {
+          track.style.transition = 'none';
+        }
+
+        track.style.transform = 'translateX(-' + offset + 'px)';
+        updateIndicators();
+      }
+
+      function next() { goTo(currentIndex + 1); }
+      function prev() { goTo(currentIndex - 1); }
+
+      track.addEventListener('transitionend', function() {
+        isTransitioning = false;
+        // Snap from clone to real slide
+        if (currentIndex >= cloneCount + totalReal) {
+          currentIndex = currentIndex - totalReal;
+          goTo(currentIndex, false);
+        } else if (currentIndex < cloneCount) {
+          currentIndex = currentIndex + totalReal;
+          goTo(currentIndex, false);
+        }
+      });
+
+      function getRealIndex() {
+        let idx = currentIndex - cloneCount;
+        idx = ((idx % totalReal) + totalReal) % totalReal;
+        return idx;
+      }
+
+      // Indicators
+      function createIndicators() {
+        const container = document.getElementById('carousel-indicators');
+        container.innerHTML = '';
+        for (let i = 0; i < totalReal; i++) {
+          const dot = document.createElement('button');
+          dot.className = 'carousel-dot';
+          dot.setAttribute('aria-label', 'Go to slide ' + (i + 1));
+          dot.addEventListener('click', function() {
+            goTo(cloneCount + i);
+            resetAutoPlay();
+          });
+          container.appendChild(dot);
+        }
+        updateIndicators();
+      }
+
+      function updateIndicators() {
+        const dots = document.querySelectorAll('.carousel-dot');
+        const realIdx = getRealIndex();
+        dots.forEach(function(dot, i) {
+          dot.classList.toggle('active', i === realIdx);
+        });
+      }
+
+      // Auto-play
+      function startAutoPlay() {
+        stopAutoPlay();
+        autoPlayTimer = setInterval(next, 6000);
+      }
+      function stopAutoPlay() {
+        if (autoPlayTimer) { clearInterval(autoPlayTimer); autoPlayTimer = null; }
+      }
+      function resetAutoPlay() {
+        stopAutoPlay();
+        startAutoPlay();
+      }
+
+      // Arrows
+      document.getElementById('carousel-prev').addEventListener('click', function() {
+        prev(); resetAutoPlay();
+      });
+      document.getElementById('carousel-next').addEventListener('click', function() {
+        next(); resetAutoPlay();
+      });
+
+      // Touch / Swipe
+      let touchStartX = 0, touchStartY = 0, touchDragging = false;
+
+      track.addEventListener('touchstart', function(e) {
+        touchStartX = e.touches[0].clientX;
+        touchStartY = e.touches[0].clientY;
+        touchDragging = true;
+        stopAutoPlay();
+      }, { passive: true });
+
+      track.addEventListener('touchend', function(e) {
+        if (!touchDragging) return;
+        touchDragging = false;
+        const diffX = touchStartX - e.changedTouches[0].clientX;
+        const diffY = touchStartY - e.changedTouches[0].clientY;
+        if (Math.abs(diffX) > Math.abs(diffY) && Math.abs(diffX) > 50) {
+          if (diffX > 0) next(); else prev();
+        }
+        startAutoPlay();
+      }, { passive: true });
+
+      // Pause on hover
+      const carouselWrapper = track.closest('.carousel-wrapper');
+      carouselWrapper.addEventListener('mouseenter', stopAutoPlay);
+      carouselWrapper.addEventListener('mouseleave', startAutoPlay);
+
+      // Pause when section not visible
+      const carouselSection = document.getElementById('gallery');
+      const carouselVisObserver = new IntersectionObserver(function(entries) {
+        entries.forEach(function(entry) {
+          if (entry.isIntersecting) startAutoPlay();
+          else stopAutoPlay();
+        });
+      }, { threshold: 0.1 });
+      carouselVisObserver.observe(carouselSection);
+
+      // Resize handler
+      let resizeTimeout;
+      window.addEventListener('resize', function() {
+        clearTimeout(resizeTimeout);
+        resizeTimeout = setTimeout(function() {
+          updateLayout();
+          goTo(currentIndex, false);
+        }, 100);
+      });
+
+      // Init
+      updateLayout();
+      goTo(cloneCount, false);
+      createIndicators();
+      startAutoPlay();
+    })();
+
+
+    // ---- KEYBOARD SHORTCUTS ----
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') { closeSignin(); closeProductModal(); closeMobileMenu(); }
+    });
+
+    // ---- SMOOTH SCROLL ----
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function(e) {
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) { e.preventDefault(); target.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
+      });
+    });
+
+  </script>
+
+</body>
+</html>
