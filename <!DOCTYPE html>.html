@@ -1,0 +1,2553 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GodAura Devices — Wearable Meditation Technology</title>
+
+  <!-- Google Fonts -->
+  <link
+    href="https://fonts.googleapis.com/css2?family=Sora:wght@200;300;400;500;600;700;800&family=Space+Grotesk:wght@300;400;500;600;700&display=swap"
+    rel="stylesheet">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <style>
+    /* ========================================
+       CSS VARIABLES & THEME
+    ======================================== */
+    :root {
+      --bg-primary: #f4f8ff;
+      --bg-secondary: #ffffff;
+      --bg-tertiary: #e8f0fe;
+      --bg-card: rgba(255, 255, 255, 0.65);
+      --text-primary: #0a0e27;
+      --text-secondary: #4a5068;
+      --text-muted: #7a8098;
+      --cyan: #00e5ff;
+      --cyan-rgb: 0, 229, 255;
+      --cyan-dark: #00b8d4;
+      --cyan-light: #80f0ff;
+      --cyan-deep: #006064;
+      --cyan-glow: rgba(0, 229, 255, 0.25);
+      --cyan-glow-strong: rgba(0, 229, 255, 0.5);
+      --nav-bg: rgba(244, 248, 255, 0.82);
+      --glass-bg: rgba(255, 255, 255, 0.12);
+      --glass-border: rgba(0, 229, 255, 0.18);
+      --shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+      --shadow-cyan: 0 4px 30px rgba(0, 229, 255, 0.15);
+      --radius: 18px;
+      --radius-sm: 12px;
+      --radius-lg: 28px;
+      --font-heading: 'Sora', sans-serif;
+      --font-body: 'Space Grotesk', sans-serif;
+      --transition: 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    body.dark-mode {
+      --bg-primary: #060a14;
+      --bg-secondary: #0c1224;
+      --bg-tertiary: #111a30;
+      --bg-card: rgba(12, 18, 36, 0.72);
+      --text-primary: #f0f4ff;
+      --text-secondary: #9aa0b8;
+      --text-muted: #6a7088;
+      --nav-bg: rgba(6, 10, 20, 0.88);
+      --glass-bg: rgba(0, 229, 255, 0.04);
+      --glass-border: rgba(0, 229, 255, 0.12);
+      --shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+      --shadow-cyan: 0 4px 40px rgba(0, 229, 255, 0.2);
+    }
+
+    /* ========================================
+       RESET & BASE
+    ======================================== */
+    *,
+    *::before,
+    *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      scroll-padding-top: 80px;
+      font-size: 16px;
+    }
+
+    body {
+      font-family: var(--font-body);
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      transition: background var(--transition), color var(--transition);
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    a {
+      text-decoration: none;
+      color: inherit;
+      transition: color var(--transition);
+    }
+
+    img {
+      max-width: 100%;
+      display: block;
+    }
+
+    button {
+      cursor: pointer;
+      border: none;
+      font-family: inherit;
+    }
+
+    input {
+      font-family: inherit;
+    }
+
+    .container {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    /* ========================================
+       LOADING SCREEN
+    ======================================== */
+    #loading-screen {
+      position: fixed;
+      inset: 0;
+      z-index: 99999;
+      background: #060a14;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      transition: opacity 0.6s ease, visibility 0.6s ease;
+    }
+
+    #loading-screen.hidden {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+    }
+
+    .loader-ring {
+      width: 80px;
+      height: 80px;
+      border: 3px solid rgba(0, 229, 255, 0.1);
+      border-top: 3px solid var(--cyan);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+
+    .loader-brand {
+      margin-top: 24px;
+      font-family: var(--font-heading);
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: var(--cyan);
+      letter-spacing: 2px;
+      animation: pulse-text 1.5s ease-in-out infinite;
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    @keyframes pulse-text {
+
+      0%,
+      100% {
+        opacity: 0.5;
+      }
+
+      50% {
+        opacity: 1;
+      }
+    }
+
+    /* ========================================
+       SCROLL PROGRESS BAR
+    ======================================== */
+    #scroll-progress {
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--cyan), var(--cyan-light));
+      z-index: 10001;
+      width: 0%;
+      transition: width 0.1s linear;
+      box-shadow: 0 0 10px var(--cyan-glow-strong);
+    }
+
+    /* ========================================
+       CUSTOM CURSOR
+    ======================================== */
+    .cursor-dot,
+    .cursor-ring {
+      position: fixed;
+      pointer-events: none;
+      z-index: 99998;
+      border-radius: 50%;
+      transition: opacity 0.3s;
+    }
+
+    .cursor-dot {
+      width: 6px;
+      height: 6px;
+      background: var(--cyan);
+      transform: translate(-50%, -50%);
+      box-shadow: 0 0 8px var(--cyan-glow-strong);
+    }
+
+    .cursor-ring {
+      width: 36px;
+      height: 36px;
+      border: 1.5px solid rgba(0, 229, 255, 0.4);
+      transform: translate(-50%, -50%);
+      transition: width 0.25s, height 0.25s, border-color 0.25s;
+    }
+
+    .cursor-ring.hover {
+      width: 52px;
+      height: 52px;
+      border-color: var(--cyan);
+    }
+
+    @media (pointer: coarse) {
+
+      .cursor-dot,
+      .cursor-ring {
+        display: none !important;
+      }
+    }
+
+    /* ========================================
+       PARTICLES CANVAS
+    ======================================== */
+    #particles-canvas {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    /* ========================================
+       NAVBAR
+    ======================================== */
+    #navbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 10000;
+      padding: 0 24px;
+      height: 72px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: var(--nav-bg);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--glass-border);
+      transition: background var(--transition), box-shadow var(--transition);
+    }
+
+    #navbar.scrolled {
+      box-shadow: 0 2px 24px rgba(0, 0, 0, 0.1);
+    }
+
+    body.dark-mode #navbar.scrolled {
+      box-shadow: 0 2px 24px rgba(0, 229, 255, 0.06);
+    }
+
+    .nav-brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-shrink: 0;
+    }
+
+    .nav-logo {
+      width: 38px;
+      height: 38px;
+      border-radius: 10px;
+      background: linear-gradient(135deg, var(--cyan), var(--cyan-dark));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      font-size: 18px;
+      font-weight: 700;
+      font-family: var(--font-heading);
+      box-shadow: 0 0 16px var(--cyan-glow);
+    }
+
+    .nav-brand-name {
+      font-family: var(--font-heading);
+      font-size: 1.15rem;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      color: var(--text-primary);
+    }
+
+    .nav-brand-name span {
+      color: var(--cyan);
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 32px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      font-size: 0.92rem;
+      font-weight: 500;
+      color: var(--text-secondary);
+      position: relative;
+      padding: 4px 0;
+      letter-spacing: 0.3px;
+      transition: color var(--transition);
+    }
+
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      bottom: -2px;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: var(--cyan);
+      border-radius: 2px;
+      transition: width var(--transition);
+      box-shadow: 0 0 6px var(--cyan-glow);
+    }
+
+    .nav-links a:hover,
+    .nav-links a.active {
+      color: var(--cyan);
+    }
+
+    .nav-links a:hover::after,
+    .nav-links a.active::after {
+      width: 100%;
+    }
+
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-shrink: 0;
+    }
+
+    .dark-toggle {
+      width: 40px;
+      height: 40px;
+      border-radius: 12px;
+      background: var(--glass-bg);
+      border: 1px solid var(--glass-border);
+      color: var(--cyan);
+      font-size: 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all var(--transition);
+      backdrop-filter: blur(10px);
+    }
+
+    .dark-toggle:hover {
+      background: var(--cyan-glow);
+      box-shadow: 0 0 16px var(--cyan-glow);
+    }
+
+    .btn-login {
+      padding: 8px 22px;
+      border-radius: 12px;
+      font-size: 0.88rem;
+      font-weight: 600;
+      background: linear-gradient(135deg, var(--cyan), var(--cyan-dark));
+      color: #fff;
+      border: none;
+      letter-spacing: 0.3px;
+      transition: all var(--transition);
+      box-shadow: 0 2px 16px var(--cyan-glow);
+    }
+
+    .btn-login:hover {
+      box-shadow: 0 4px 28px var(--cyan-glow-strong);
+      transform: translateY(-1px);
+    }
+
+    .hamburger {
+      display: none;
+      width: 40px;
+      height: 40px;
+      border-radius: 12px;
+      background: var(--glass-bg);
+      border: 1px solid var(--glass-border);
+      color: var(--cyan);
+      font-size: 1.1rem;
+      align-items: center;
+      justify-content: center;
+      backdrop-filter: blur(10px);
+      transition: all var(--transition);
+    }
+
+    .hamburger:hover {
+      background: var(--cyan-glow);
+    }
+
+    /* ========================================
+       MOBILE MENU
+    ======================================== */
+    .mobile-menu-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 10009;
+      background: rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(4px);
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.35s ease;
+    }
+
+    .mobile-menu-overlay.open {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .mobile-menu {
+      position: fixed;
+      top: 0;
+      right: 0;
+      width: min(320px, 85vw);
+      height: 100vh;
+      z-index: 10010;
+      background: var(--bg-secondary);
+      border-left: 1px solid var(--glass-border);
+      transform: translateX(100%);
+      transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      display: flex;
+      flex-direction: column;
+      padding: 24px;
+      overflow-y: auto;
+    }
+
+    .mobile-menu.open {
+      transform: translateX(0);
+      box-shadow: -8px 0 40px rgba(0, 229, 255, 0.1);
+    }
+
+    .mobile-menu-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 36px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid var(--glass-border);
+    }
+
+    .mobile-menu-close {
+      width: 38px;
+      height: 38px;
+      border-radius: 10px;
+      background: var(--glass-bg);
+      border: 1px solid var(--glass-border);
+      color: var(--text-primary);
+      font-size: 1.1rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all var(--transition);
+    }
+
+    .mobile-menu-close:hover {
+      color: var(--cyan);
+      border-color: var(--cyan);
+    }
+
+    .mobile-menu-links {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .mobile-menu-links li a {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 14px 16px;
+      border-radius: var(--radius-sm);
+      font-size: 0.95rem;
+      font-weight: 500;
+      color: var(--text-secondary);
+      transition: all var(--transition);
+    }
+
+    .mobile-menu-links li a i {
+      width: 20px;
+      text-align: center;
+      color: var(--cyan);
+      font-size: 0.9rem;
+    }
+
+    .mobile-menu-links li a:hover {
+      background: var(--cyan-glow);
+      color: var(--cyan);
+      transform: translateX(4px);
+    }
+
+    .mobile-menu-divider {
+      height: 1px;
+      background: var(--glass-border);
+      margin: 16px 0;
+    }
+
+    /* ========================================
+       SECTION STYLES (SHARED)
+    ======================================== */
+    section {
+      position: relative;
+      z-index: 1;
+    }
+
+    .section-tag {
+      display: inline-block;
+      font-size: 0.78rem;
+      font-weight: 600;
+      letter-spacing: 2.5px;
+      text-transform: uppercase;
+      color: var(--cyan);
+      background: var(--cyan-glow);
+      padding: 6px 16px;
+      border-radius: 20px;
+      margin-bottom: 16px;
+    }
+
+    .section-heading {
+      font-family: var(--font-heading);
+      font-size: clamp(2rem, 4vw, 3rem);
+      font-weight: 700;
+      line-height: 1.15;
+      letter-spacing: -0.5px;
+      color: var(--text-primary);
+      margin-bottom: 16px;
+    }
+
+    .section-heading .cyan {
+      color: var(--cyan);
+    }
+
+    .section-subtext {
+      font-size: 1.05rem;
+      line-height: 1.7;
+      color: var(--text-secondary);
+      max-width: 600px;
+    }
+
+    /* ========================================
+       HERO / HOME SECTION
+    ======================================== */
+    #home {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      padding-top: 72px;
+      overflow: hidden;
+    }
+
+    .hero-container {
+      display: flex;
+      align-items: center;
+      gap: 60px;
+      width: 100%;
+    }
+
+    .hero-image-wrap {
+      flex: 0 0 44%;
+      position: relative;
+      display: flex;
+      justify-content: center;
+    }
+
+    .hero-image-glow {
+      position: absolute;
+      width: 110%;
+      height: 110%;
+      top: -5%;
+      left: -5%;
+      background: radial-gradient(circle, var(--cyan-glow) 0%, transparent 70%);
+      border-radius: 50%;
+      filter: blur(40px);
+      animation: glow-breathe 4s ease-in-out infinite;
+    }
+
+    @keyframes glow-breathe {
+
+      0%,
+      100% {
+        opacity: 0.5;
+        transform: scale(1);
+      }
+
+      50% {
+        opacity: 0.8;
+        transform: scale(1.05);
+      }
+    }
+
+    .hero-image {
+      position: relative;
+      z-index: 2;
+      width: 100%;
+      max-width: 420px;
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-cyan);
+      animation: float 6s ease-in-out infinite;
+    }
+
+    @keyframes float {
+
+      0%,
+      100% {
+        transform: translateY(0);
+      }
+
+      50% {
+        transform: translateY(-18px);
+      }
+    }
+
+    .hero-content {
+      flex: 1;
+    }
+
+    .hero-tag {
+      display: inline-block;
+      font-size: 0.76rem;
+      font-weight: 600;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--cyan);
+      margin-bottom: 20px;
+    }
+
+    .hero-heading {
+      font-family: var(--font-heading);
+      font-size: clamp(2.4rem, 5.5vw, 4rem);
+      font-weight: 800;
+      line-height: 1.08;
+      letter-spacing: -1px;
+      margin-bottom: 24px;
+    }
+
+    .hero-heading .cyan {
+      color: var(--cyan);
+      text-shadow: 0 0 30px var(--cyan-glow);
+    }
+
+    .hero-desc {
+      font-size: 1.08rem;
+      line-height: 1.75;
+      color: var(--text-secondary);
+      max-width: 540px;
+      margin-bottom: 36px;
+    }
+
+    .hero-buttons {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .btn-primary {
+      padding: 14px 36px;
+      border-radius: 14px;
+      font-size: 0.95rem;
+      font-weight: 600;
+      background: linear-gradient(135deg, var(--cyan), var(--cyan-dark));
+      color: #fff;
+      border: none;
+      letter-spacing: 0.3px;
+      transition: all var(--transition);
+      box-shadow: 0 4px 24px var(--cyan-glow);
+    }
+
+    .btn-primary:hover {
+      box-shadow: 0 6px 36px var(--cyan-glow-strong);
+      transform: translateY(-2px);
+    }
+
+    .btn-outline {
+      padding: 14px 36px;
+      border-radius: 14px;
+      font-size: 0.95rem;
+      font-weight: 600;
+      background: transparent;
+      color: var(--cyan);
+      border: 1.5px solid var(--cyan);
+      letter-spacing: 0.3px;
+      transition: all var(--transition);
+    }
+
+    .btn-outline:hover {
+      background: var(--cyan);
+      color: #fff;
+      box-shadow: 0 4px 24px var(--cyan-glow);
+      transform: translateY(-2px);
+    }
+
+    /* ========================================
+       ABOUT SECTION
+    ======================================== */
+    #about {
+      padding: 100px 0;
+    }
+
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 36px;
+    }
+
+    .about-card {
+      background: var(--bg-card);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius-lg);
+      padding: 44px;
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      transition: all var(--transition);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .about-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 3px;
+      background: linear-gradient(90deg, var(--cyan), transparent);
+    }
+
+    .about-card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-cyan);
+      border-color: rgba(0, 229, 255, 0.3);
+    }
+
+    .about-card-icon {
+      width: 52px;
+      height: 52px;
+      border-radius: 14px;
+      background: var(--cyan-glow);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.3rem;
+      color: var(--cyan);
+      margin-bottom: 20px;
+    }
+
+    .about-card h3 {
+      font-family: var(--font-heading);
+      font-size: 1.55rem;
+      font-weight: 700;
+      margin-bottom: 16px;
+      color: var(--text-primary);
+    }
+
+    .about-card p {
+      font-size: 0.97rem;
+      line-height: 1.78;
+      color: var(--text-secondary);
+    }
+
+    .about-btn-wrap {
+      margin-top: 36px;
+      display: flex;
+      justify-content: center;
+    }
+
+    /* ========================================
+       CAROUSEL SECTION
+    ======================================== */
+    #carousel {
+      padding: 100px 0;
+    }
+
+    .carousel-header {
+      text-align: center;
+      margin-bottom: 48px;
+    }
+
+    .carousel-header .section-subtext {
+      margin: 0 auto;
+    }
+
+    .carousel-wrapper {
+      position: relative;
+      overflow: hidden;
+      border-radius: var(--radius-lg);
+    }
+
+    .carousel-track-container {
+      overflow: hidden;
+      border-radius: var(--radius-lg);
+    }
+
+    .carousel-track {
+      display: flex;
+      transition: transform 0.65s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .carousel-slide {
+      flex: 0 0 calc(100% / 3);
+      padding: 0 10px;
+    }
+
+    .carousel-slide img {
+      width: 100%;
+      height: 280px;
+      object-fit: cover;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-cyan);
+      transition: transform var(--transition), box-shadow var(--transition);
+    }
+
+    .carousel-slide img:hover {
+      transform: scale(1.04);
+      box-shadow: 0 8px 40px var(--cyan-glow-strong);
+    }
+
+    .carousel-btn {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 46px;
+      height: 46px;
+      border-radius: 50%;
+      background: var(--bg-card);
+      border: 1px solid var(--glass-border);
+      backdrop-filter: blur(16px);
+      color: var(--cyan);
+      font-size: 1.1rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 10;
+      transition: all var(--transition);
+      box-shadow: var(--shadow);
+    }
+
+    .carousel-btn:hover {
+      background: var(--cyan);
+      color: #fff;
+      box-shadow: 0 0 20px var(--cyan-glow-strong);
+    }
+
+    .carousel-btn-prev {
+      left: 12px;
+    }
+
+    .carousel-btn-next {
+      right: 12px;
+    }
+
+    .carousel-dots {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 28px;
+    }
+
+    .carousel-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--text-muted);
+      border: none;
+      transition: all var(--transition);
+      cursor: pointer;
+    }
+
+    .carousel-dot.active {
+      background: var(--cyan);
+      box-shadow: 0 0 10px var(--cyan-glow-strong);
+      transform: scale(1.3);
+    }
+
+    /* ========================================
+       RESEARCH SECTION
+    ======================================== */
+    #research {
+      padding: 100px 0;
+    }
+
+    .research-header {
+      text-align: center;
+      margin-bottom: 56px;
+    }
+
+    .research-header .section-subtext {
+      margin: 0 auto;
+    }
+
+    .research-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 32px;
+    }
+
+    .research-card {
+      background: var(--bg-card);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius-lg);
+      padding: 32px;
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      transition: all var(--transition);
+    }
+
+    .research-card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-cyan);
+      border-color: rgba(0, 229, 255, 0.3);
+    }
+
+    .research-card h4 {
+      font-family: var(--font-heading);
+      font-size: 1.15rem;
+      font-weight: 600;
+      margin-bottom: 6px;
+      color: var(--text-primary);
+    }
+
+    .research-card .research-sub {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      margin-bottom: 20px;
+    }
+
+    .chart-container {
+      position: relative;
+      height: 220px;
+      width: 100%;
+    }
+
+    .research-btn-wrap {
+      margin-top: 48px;
+      display: flex;
+      justify-content: center;
+    }
+
+    /* ========================================
+       PRODUCTS SECTION
+    ======================================== */
+    #products {
+      padding: 100px 0;
+    }
+
+    .products-header {
+      text-align: center;
+      margin-bottom: 56px;
+    }
+
+    .products-header .section-subtext {
+      margin: 0 auto;
+    }
+
+    .products-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 32px;
+    }
+
+    .product-card {
+      background: var(--bg-card);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius-lg);
+      padding: 32px;
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      text-align: center;
+      transition: all var(--transition);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .product-card::before {
+      content: '';
+      position: absolute;
+      inset: -1px;
+      border-radius: var(--radius-lg);
+      padding: 1.5px;
+      background: linear-gradient(135deg, var(--cyan), transparent, var(--cyan));
+      -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      -webkit-mask-composite: xor;
+      mask-composite: exclude;
+      opacity: 0;
+      transition: opacity var(--transition);
+    }
+
+    .product-card:hover::before {
+      opacity: 1;
+    }
+
+    .product-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 8px 40px var(--cyan-glow);
+    }
+
+    .product-card-img {
+      width: 100%;
+      height: 220px;
+      object-fit: cover;
+      border-radius: var(--radius);
+      margin-bottom: 24px;
+      box-shadow: var(--shadow-cyan);
+    }
+
+    .product-card h4 {
+      font-family: var(--font-heading);
+      font-size: 1.25rem;
+      font-weight: 700;
+      margin-bottom: 10px;
+    }
+
+    .product-card p {
+      font-size: 0.92rem;
+      line-height: 1.65;
+      color: var(--text-secondary);
+      margin-bottom: 24px;
+    }
+
+    .product-price {
+      font-family: var(--font-heading);
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: var(--cyan);
+      margin-bottom: 20px;
+    }
+
+    /* ========================================
+       FOOTER
+    ======================================== */
+    #footer {
+      padding: 80px 0 32px;
+      background: var(--bg-secondary);
+      border-top: 1px solid var(--glass-border);
+    }
+
+    .footer-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 48px;
+      margin-bottom: 48px;
+    }
+
+    .footer-col h5 {
+      font-family: var(--font-heading);
+      font-size: 0.92rem;
+      font-weight: 700;
+      color: var(--cyan);
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      margin-bottom: 20px;
+    }
+
+    .footer-col ul {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .footer-col ul li a {
+      font-size: 0.92rem;
+      color: var(--text-secondary);
+      transition: all var(--transition);
+    }
+
+    .footer-col ul li a:hover {
+      color: #ffffff;
+      padding-left: 6px;
+    }
+
+    body:not(.dark-mode) .footer-col ul li a:hover {
+      color: var(--cyan-dark);
+    }
+
+    .footer-contact {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-bottom: 48px;
+      text-align: center;
+    }
+
+    .footer-contact span {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+    }
+
+    .footer-contact span i {
+      color: var(--cyan);
+      margin-right: 8px;
+    }
+
+    .footer-bottom {
+      text-align: center;
+      padding-top: 24px;
+      border-top: 1px solid var(--glass-border);
+    }
+
+    .footer-bottom p {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+
+    .footer-bottom .brand {
+      font-family: var(--font-heading);
+      font-weight: 700;
+      color: var(--cyan);
+    }
+
+    /* ========================================
+       MODALS
+    ======================================== */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 10020;
+      background: rgba(0, 0, 0, 0.55);
+      backdrop-filter: blur(8px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.35s ease;
+      padding: 24px;
+    }
+
+    .modal-overlay.open {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .modal-box {
+      background: var(--bg-secondary);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius-lg);
+      padding: 40px;
+      max-width: 460px;
+      width: 100%;
+      max-height: 90vh;
+      overflow-y: auto;
+      position: relative;
+      transform: scale(0.92) translateY(20px);
+      transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 0 16px 64px rgba(0, 0, 0, 0.3), 0 0 40px var(--cyan-glow);
+    }
+
+    .modal-overlay.open .modal-box {
+      transform: scale(1) translateY(0);
+    }
+
+    .modal-close {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      background: var(--glass-bg);
+      border: 1px solid var(--glass-border);
+      color: var(--text-primary);
+      font-size: 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all var(--transition);
+    }
+
+    .modal-close:hover {
+      color: var(--cyan);
+      border-color: var(--cyan);
+    }
+
+    /* Sign In Modal */
+    .signin-modal h3 {
+      font-family: var(--font-heading);
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    .signin-modal .signin-sub {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      margin-bottom: 28px;
+    }
+
+    .form-group {
+      margin-bottom: 18px;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: var(--text-secondary);
+      margin-bottom: 6px;
+    }
+
+    .form-group input {
+      width: 100%;
+      padding: 12px 16px;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--glass-border);
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      font-size: 0.92rem;
+      transition: all var(--transition);
+      outline: none;
+    }
+
+    .form-group input:focus {
+      border-color: var(--cyan);
+      box-shadow: 0 0 12px var(--cyan-glow);
+    }
+
+    .btn-google {
+      width: 100%;
+      padding: 12px;
+      border-radius: var(--radius-sm);
+      background: var(--bg-primary);
+      border: 1px solid var(--glass-border);
+      color: var(--text-primary);
+      font-size: 0.92rem;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 18px;
+      transition: all var(--transition);
+    }
+
+    .btn-google:hover {
+      border-color: var(--cyan);
+      box-shadow: 0 0 12px var(--cyan-glow);
+    }
+
+    .btn-google img {
+      width: 20px;
+      height: 20px;
+    }
+
+    .btn-submit {
+      width: 100%;
+      padding: 13px;
+      border-radius: var(--radius-sm);
+      background: linear-gradient(135deg, var(--cyan), var(--cyan-dark));
+      color: #fff;
+      font-size: 0.95rem;
+      font-weight: 600;
+      border: none;
+      margin-top: 8px;
+      transition: all var(--transition);
+      box-shadow: 0 4px 20px var(--cyan-glow);
+    }
+
+    .btn-submit:hover {
+      box-shadow: 0 6px 30px var(--cyan-glow-strong);
+      transform: translateY(-1px);
+    }
+
+    /* Buy Modal */
+    .buy-modal h3 {
+      font-family: var(--font-heading);
+      font-size: 1.4rem;
+      font-weight: 700;
+      margin-bottom: 12px;
+    }
+
+    .buy-modal .buy-price {
+      font-family: var(--font-heading);
+      font-size: 1.6rem;
+      font-weight: 700;
+      color: var(--cyan);
+      margin-bottom: 20px;
+    }
+
+    .buy-modal .buy-img {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+      border-radius: var(--radius);
+      margin-bottom: 20px;
+    }
+
+    .spec-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-bottom: 24px;
+    }
+
+    .spec-list li {
+      display: flex;
+      justify-content: space-between;
+      padding: 10px 0;
+      border-bottom: 1px solid var(--glass-border);
+      font-size: 0.9rem;
+    }
+
+    .spec-list li span:first-child {
+      color: var(--text-muted);
+    }
+
+    .spec-list li span:last-child {
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+
+    /* ========================================
+       SCROLL ANIMATIONS
+    ======================================== */
+    .reveal {
+      opacity: 0;
+      transform: translateY(40px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .reveal-left {
+      opacity: 0;
+      transform: translateX(-40px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+
+    .reveal-left.visible {
+      opacity: 1;
+      transform: translateX(0);
+    }
+
+    .reveal-right {
+      opacity: 0;
+      transform: translateX(40px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+
+    .reveal-right.visible {
+      opacity: 1;
+      transform: translateX(0);
+    }
+
+    /* ========================================
+       AMBIENT GRADIENT BLOBS
+    ======================================== */
+    .ambient-blob {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(80px);
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0.3;
+    }
+
+    body.dark-mode .ambient-blob {
+      opacity: 0.15;
+    }
+
+    /* ========================================
+       RESPONSIVE
+    ======================================== */
+    @media (max-width: 1024px) {
+      .hero-container {
+        gap: 36px;
+      }
+
+      .hero-image-wrap {
+        flex: 0 0 40%;
+      }
+
+      .carousel-slide {
+        flex: 0 0 calc(100% / 2);
+      }
+
+      .products-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 768px) {
+      .nav-links {
+        display: none;
+      }
+
+      .hamburger {
+        display: flex;
+      }
+
+      .hero-container {
+        flex-direction: column;
+        text-align: center;
+        padding-top: 24px;
+      }
+
+      .hero-image-wrap {
+        flex: none;
+        width: 70%;
+        max-width: 320px;
+      }
+
+      .hero-content {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .hero-desc {
+        max-width: 100%;
+      }
+
+      .hero-buttons {
+        justify-content: center;
+      }
+
+      .about-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .carousel-slide {
+        flex: 0 0 100%;
+      }
+
+      .research-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .products-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .footer-grid {
+        grid-template-columns: 1fr;
+        gap: 32px;
+      }
+
+      .section-heading {
+        font-size: clamp(1.7rem, 5vw, 2.5rem);
+      }
+    }
+
+    @media (max-width: 480px) {
+      .container {
+        padding: 0 16px;
+      }
+
+      .hero-heading {
+        font-size: clamp(1.8rem, 7vw, 2.6rem);
+      }
+
+      .hero-buttons {
+        flex-direction: column;
+        width: 100%;
+      }
+
+      .hero-buttons .btn-primary,
+      .hero-buttons .btn-outline {
+        width: 100%;
+        text-align: center;
+      }
+
+      .about-card {
+        padding: 28px;
+      }
+
+      .modal-box {
+        padding: 28px;
+      }
+    }
+
+    @media (min-width: 1440px) {
+      .container {
+        max-width: 1400px;
+      }
+    }
+
+    /* ========================================
+       TOAST NOTIFICATION
+    ======================================== */
+    .toast {
+      position: fixed;
+      bottom: 32px;
+      right: 32px;
+      z-index: 10030;
+      background: var(--bg-secondary);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius-sm);
+      padding: 14px 24px;
+      font-size: 0.9rem;
+      color: var(--text-primary);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2), 0 0 20px var(--cyan-glow);
+      transform: translateY(100px);
+      opacity: 0;
+      transition: all 0.4s ease;
+    }
+
+    .toast.show {
+      transform: translateY(0);
+      opacity: 1;
+    }
+
+    .toast i {
+      color: var(--cyan);
+      margin-right: 8px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- LOADING SCREEN -->
+  <div id="loading-screen">
+    <div class="loader-ring"></div>
+    <div class="loader-brand">GodAura</div>
+  </div>
+
+  <!-- SCROLL PROGRESS -->
+  <div id="scroll-progress"></div>
+
+  <!-- CUSTOM CURSOR -->
+  <div class="cursor-dot" id="cursor-dot"></div>
+  <div class="cursor-ring" id="cursor-ring"></div>
+
+  <!-- PARTICLES CANVAS -->
+  <canvas id="particles-canvas"></canvas>
+
+  <!-- ==================== NAVBAR ==================== -->
+  <nav id="navbar">
+    <a href="#home" class="nav-brand">
+      <div class="nav-logo">G</div>
+      <div class="nav-brand-name">God<span>Aura</span></div>
+    </a>
+
+    <ul class="nav-links">
+      <li><a href="#home" class="nav-link active">Home</a></li>
+      <li><a href="#about" class="nav-link">About Us</a></li>
+      <li><a href="#research" class="nav-link">Research</a></li>
+      <li><a href="#products" class="nav-link">Products</a></li>
+    </ul>
+
+    <div class="nav-right">
+      <button class="dark-toggle" id="dark-toggle" aria-label="Toggle dark mode">
+        <i class="fas fa-moon"></i>
+      </button>
+      <button class="btn-login" id="nav-login-btn">Sign In</button>
+      <button class="hamburger" id="hamburger-btn" aria-label="Open menu">
+        <i class="fas fa-bars"></i>
+      </button>
+    </div>
+  </nav>
+
+  <!-- ==================== MOBILE MENU ==================== -->
+  <div class="mobile-menu-overlay" id="mobile-overlay"></div>
+  <div class="mobile-menu" id="mobile-menu">
+    <div class="mobile-menu-header">
+      <div class="nav-brand">
+        <div class="nav-logo" style="width:32px;height:32px;font-size:14px;">G</div>
+        <div class="nav-brand-name" style="font-size:1rem;">God<span>Aura</span></div>
+      </div>
+      <button class="mobile-menu-close" id="mobile-close" aria-label="Close menu">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+    <ul class="mobile-menu-links">
+      <li><a href="#home" class="mobile-link"><i class="fas fa-home"></i> Home</a></li>
+      <li><a href="#about" class="mobile-link"><i class="fas fa-users"></i> About Us</a></li>
+      <li><a href="#carousel" class="mobile-link"><i class="fas fa-images"></i> Image Carousel</a></li>
+      <li><a href="#research" class="mobile-link"><i class="fas fa-flask"></i> Research</a></li>
+      <li><a href="#products" class="mobile-link"><i class="fas fa-box-open"></i> Products</a></li>
+      <div class="mobile-menu-divider"></div>
+      <li><a href="learn-more.html" class="mobile-link"><i class="fas fa-info-circle"></i> Learn More</a></li>
+      <li><a href="achievements.html" class="mobile-link"><i class="fas fa-trophy"></i> View Our Past Achievements</a>
+      </li>
+      <li><a href="all-researches.html" class="mobile-link"><i class="fas fa-microscope"></i> View All Researches</a>
+      </li>
+    </ul>
+  </div>
+
+  <!-- ==================== HERO / HOME ==================== -->
+  <section id="home">
+    <!-- Ambient blobs -->
+    <div class="ambient-blob" style="width:500px;height:500px;background:rgba(0,229,255,0.15);top:-100px;right:-150px;">
+    </div>
+    <div class="ambient-blob" style="width:400px;height:400px;background:rgba(0,229,255,0.1);bottom:50px;left:-100px;">
+    </div>
+
+    <div class="container">
+      <div class="hero-container">
+        <div class="hero-image-wrap reveal-left">
+          <div class="hero-image-glow"></div>
+          <img src="https://picsum.photos/seed/godaura-meditation/600/700" alt="Person meditating with GodAura headband"
+            class="hero-image">
+        </div>
+        <div class="hero-content reveal-right">
+          <div class="hero-tag">Wearable Meditation Technology</div>
+          <h1 class="hero-heading">
+            Calm Your Mind.<br>
+            Feel The <span class="cyan">Aura</span>.
+          </h1>
+          <p class="hero-desc">
+            GodAura Devices creates wearable meditation technology that blends neuroscience, calming vibrations, and
+            modern design. Our goal is to make meditation easier for people struggling with stress, overthinking,
+            anxiety, insomnia, and mental exhaustion.
+          </p>
+          <div class="hero-buttons">
+            <button class="btn-primary" id="hero-signin-btn">Sign In</button>
+            <a href="learn-more.html" class="btn-outline">Learn More</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== ABOUT US ==================== -->
+  <section id="about">
+    <div class="ambient-blob" style="width:350px;height:350px;background:rgba(0,229,255,0.1);top:100px;left:-80px;">
+    </div>
+    <div class="container">
+      <div class="about-grid">
+        <div class="about-card reveal-left">
+          <div class="about-card-icon"><i class="fas fa-bullseye"></i></div>
+          <h3>Our Mission</h3>
+          <p>GodAura Devices was founded in 2022 with one idea — meditation should be easier for everyone.</p>
+          <p style="margin-top:12px;">After seeing how many people struggled with stress, anxiety, insomnia, and
+            constant overthinking, we wanted to create something that could genuinely help. Meditation has always been
+            powerful, but many people find it difficult to quiet their minds and fully relax.</p>
+          <p style="margin-top:12px;">That inspired the idea behind GodAura: a wearable device that uses carefully tuned
+            rhythmic vibrations to help guide the brain into a calmer, more focused state. At first, the idea felt
+            uncertain, but after research and testing, the results were clear — vibration patterns could genuinely help
+            people relax, focus, and meditate more effectively.</p>
+          <p style="margin-top:12px;">Today, GodAura combines wellness, technology, and human-centered design to create
+            meditation tools built for modern life.</p>
+        </div>
+        <div class="about-card reveal-right">
+          <div class="about-card-icon"><i class="fas fa-atom"></i></div>
+          <h3>Science Meets Serenity</h3>
+          <p>Every GodAura device is carefully designed to help people feel relief from stress, anxiety, insomnia,
+            overthinking, and mental fatigue through guided vibration-based meditation.</p>
+          <p style="margin-top:12px;">Before launching any new model, our devices go through testing and real-user
+            trials to study relaxation levels, sleep improvement, focus, and overall mental wellness progress. We
+            continuously improve our technology to create a calmer, more effective meditation experience for everyday
+            life.</p>
+        </div>
+      </div>
+      <div class="about-btn-wrap reveal">
+        <a href="achievements.html" class="btn-outline" style="display:inline-flex;align-items:center;gap:8px;">
+          <i class="fas fa-trophy"></i> View Our Past Achievements
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== IMAGE CAROUSEL ==================== -->
+  <section id="carousel">
+    <div class="ambient-blob"
+      style="width:400px;height:400px;background:rgba(0,229,255,0.08);bottom:-50px;right:-100px;"></div>
+    <div class="container">
+      <div class="carousel-header reveal">
+        <div class="section-tag">Visual Experience</div>
+        <h2 class="section-heading">Inside The <span class="cyan">GodAura</span> Experience</h2>
+        <p class="section-subtext">Explore the serene world of GodAura — where technology meets tranquility, and every
+          moment is designed to restore your inner peace.</p>
+      </div>
+
+      <div class="carousel-wrapper reveal">
+        <div class="carousel-track-container">
+          <div class="carousel-track" id="carousel-track">
+            <!-- Slides will be injected by JS -->
+          </div>
+        </div>
+        <button class="carousel-btn carousel-btn-prev" id="carousel-prev" aria-label="Previous"><i
+            class="fas fa-chevron-left"></i></button>
+        <button class="carousel-btn carousel-btn-next" id="carousel-next" aria-label="Next"><i
+            class="fas fa-chevron-right"></i></button>
+      </div>
+      <div class="carousel-dots" id="carousel-dots"></div>
+    </div>
+  </section>
+
+  <!-- ==================== RESEARCH ==================== -->
+  <section id="research">
+    <div class="ambient-blob" style="width:350px;height:350px;background:rgba(0,229,255,0.08);top:0;left:-60px;"></div>
+    <div class="container">
+      <div class="research-header reveal">
+        <div class="section-tag">Research & Data</div>
+        <h2 class="section-heading">Backed By <span class="cyan">Science</span></h2>
+        <p class="section-subtext">Real data. Real results. Our research demonstrates the measurable impact of GodAura
+          technology on mental wellness.</p>
+      </div>
+
+      <div class="research-grid">
+        <div class="research-card reveal-left">
+          <h4><i class="fas fa-brain" style="color:var(--cyan);margin-right:8px;"></i>Stress Reduction</h4>
+          <p class="research-sub">Average cortisol decrease over 8 weeks</p>
+          <div class="chart-container"><canvas id="chart-stress"></canvas></div>
+        </div>
+        <div class="research-card reveal-right">
+          <h4><i class="fas fa-moon" style="color:var(--cyan);margin-right:8px;"></i>Sleep Improvement</h4>
+          <p class="research-sub">Hours of quality sleep per night</p>
+          <div class="chart-container"><canvas id="chart-sleep"></canvas></div>
+        </div>
+        <div class="research-card reveal-left">
+          <h4><i class="fas fa-crosshairs" style="color:var(--cyan);margin-right:8px;"></i>Focus Tracking</h4>
+          <p class="research-sub">Cognitive focus score over time</p>
+          <div class="chart-container"><canvas id="chart-focus"></canvas></div>
+        </div>
+        <div class="research-card reveal-right">
+          <h4><i class="fas fa-om" style="color:var(--cyan);margin-right:8px;"></i>Meditation Consistency</h4>
+          <p class="research-sub">Sessions completed per week</p>
+          <div class="chart-container"><canvas id="chart-meditation"></canvas></div>
+        </div>
+      </div>
+
+      <div class="research-btn-wrap reveal">
+        <a href="all-researches.html" class="btn-primary" style="display:inline-flex;align-items:center;gap:8px;">
+          <i class="fas fa-microscope"></i> View All Researches
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== PRODUCTS ==================== -->
+  <section id="products">
+    <div class="ambient-blob"
+      style="width:500px;height:500px;background:rgba(0,229,255,0.07);bottom:-100px;right:-150px;"></div>
+    <div class="container">
+      <div class="products-header reveal">
+        <div class="section-tag">Our Devices</div>
+        <h2 class="section-heading">GodAura <span class="cyan">Products</span></h2>
+        <p class="section-subtext">Meditation technology crafted with precision, designed for everyday calm.</p>
+      </div>
+
+      <div class="products-grid">
+        <!-- Product 1 -->
+        <div class="product-card reveal">
+          <img src="https://picsum.photos/seed/godaura-product1/500/400" alt="GodAura ZenBand Pro"
+            class="product-card-img">
+          <h4>GodAura ZenBand Pro</h4>
+          <p>Advanced meditation headband with real-time brainwave tracking and adaptive vibration therapy for deep
+            relaxation.</p>
+          <div class="product-price">$249</div>
+          <button class="btn-primary buy-btn" data-product="0" style="width:100%;">Buy Now</button>
+        </div>
+        <!-- Product 2 -->
+        <div class="product-card reveal">
+          <img src="https://picsum.photos/seed/godaura-product2/500/400" alt="GodAura CalmLite"
+            class="product-card-img">
+          <h4>GodAura CalmLite</h4>
+          <p>Lightweight, travel-friendly meditation band with guided vibration sessions and sleep optimization modes.
+          </p>
+          <div class="product-price">$149</div>
+          <button class="btn-primary buy-btn" data-product="1" style="width:100%;">Buy Now</button>
+        </div>
+        <!-- Product 3 -->
+        <div class="product-card reveal">
+          <img src="https://picsum.photos/seed/godaura-product3/500/400" alt="GodAura AuraMax" class="product-card-img">
+          <h4>GodAura AuraMax</h4>
+          <p>Premium full-spectrum wellness headset with haptic feedback, EEG monitoring, and AI-personalized
+            meditation.</p>
+          <div class="product-price">$399</div>
+          <button class="btn-primary buy-btn" data-product="2" style="width:100%;">Buy Now</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== FOOTER ==================== -->
+  <footer id="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-col">
+          <h5>Navigate</h5>
+          <ul>
+            <li><a href="#home">Home</a></li>
+            <li><a href="#about">About Us</a></li>
+            <li><a href="#research">Research</a></li>
+            <li><a href="#products">Products</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h5>Discover</h5>
+          <ul>
+            <li><a href="learn-more.html">Learn More</a></li>
+            <li><a href="achievements.html">Achievements</a></li>
+            <li><a href="all-researches.html">All Researches</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h5>Account</h5>
+          <ul>
+            <li><a href="#" id="footer-login">Login</a></li>
+            <li><a href="#" id="footer-signin">Sign In</a></li>
+            <li><a href="#">Download App</a></li>
+            <li><a href="#products">Buy Products</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer-contact">
+        <span><i class="fas fa-envelope"></i> support@godaura.com</span>
+        <span><i class="fas fa-phone"></i> +1 (800) 555-AURA</span>
+      </div>
+
+      <div class="footer-bottom">
+        <p><span class="brand">GodAura Devices</span> &copy; 2022 &mdash; All rights reserved. Trademark of GodAura
+          Technologies Inc.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ==================== SIGN IN MODAL ==================== -->
+  <div class="modal-overlay" id="signin-modal">
+    <div class="modal-box signin-modal">
+      <button class="modal-close" id="signin-close" aria-label="Close"><i class="fas fa-times"></i></button>
+      <h3>Welcome Back</h3>
+      <p class="signin-sub">Sign in to your GodAura account</p>
+      <form id="signin-form" onsubmit="return false;">
+        <div class="form-group">
+          <label for="signin-email">Email Address</label>
+          <input type="email" id="signin-email" placeholder="you@example.com" required>
+        </div>
+        <div class="form-group">
+          <label for="signin-password">Password</label>
+          <input type="password" id="signin-password" placeholder="Enter your password" required>
+        </div>
+        <div class="form-group">
+          <label for="signin-code">Confirmation Code</label>
+          <input type="text" id="signin-code" placeholder="6-digit code" maxlength="6">
+        </div>
+        <button type="submit" class="btn-submit">Sign In</button>
+      </form>
+      <button class="btn-google" id="google-signin">
+        <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google">
+        Sign in with Google
+      </button>
+    </div>
+  </div>
+
+  <!-- ==================== BUY MODAL ==================== -->
+  <div class="modal-overlay" id="buy-modal">
+    <div class="modal-box buy-modal">
+      <button class="modal-close" id="buy-close" aria-label="Close"><i class="fas fa-times"></i></button>
+      <img id="buy-img" src="" alt="Product" class="buy-img">
+      <h3 id="buy-title"></h3>
+      <div class="buy-price" id="buy-price"></div>
+      <ul class="spec-list" id="buy-specs"></ul>
+      <button class="btn-submit" id="buy-confirm">Proceed to Checkout</button>
+    </div>
+  </div>
+
+  <!-- ==================== TOAST ==================== -->
+  <div class="toast" id="toast"></div>
+
+
+  <script>
+    /* ============================================
+       DATA
+    ============================================ */
+    const PRODUCT_DATA = [
+      {
+        name: 'GodAura ZenBand Pro',
+        price: '$249',
+        img: 'https://picsum.photos/seed/godaura-product1/500/400',
+        specs: {
+          'Battery Life': '12 hours',
+          'Connectivity': 'Bluetooth 5.3',
+          'Sensors': 'EEG + HRV',
+          'Vibration Modes': '8 Adaptive Patterns',
+          'Weight': '42g',
+          'Water Resistance': 'IPX4'
+        }
+      },
+      {
+        name: 'GodAura CalmLite',
+        price: '$149',
+        img: 'https://picsum.photos/seed/godaura-product2/500/400',
+        specs: {
+          'Battery Life': '8 hours',
+          'Connectivity': 'Bluetooth 5.2',
+          'Sensors': 'HRV',
+          'Vibration Modes': '5 Guided Patterns',
+          'Weight': '28g',
+          'Water Resistance': 'IPX2'
+        }
+      },
+      {
+        name: 'GodAura AuraMax',
+        price: '$399',
+        img: 'https://picsum.photos/seed/godaura-product3/500/400',
+        specs: {
+          'Battery Life': '16 hours',
+          'Connectivity': 'Bluetooth 5.3 + WiFi',
+          'Sensors': 'EEG + HRV + SpO2',
+          'Vibration Modes': '12 AI-Personalized',
+          'Weight': '58g',
+          'Water Resistance': 'IPX5'
+        }
+      }
+    ];
+
+    const CAROUSEL_IMAGES = [
+      { src: 'https://picsum.photos/seed/zen-calm-1/800/500', alt: 'Meditation sanctuary' },
+      { src: 'https://picsum.photos/seed/zen-calm-2/800/500', alt: 'Peaceful sleep environment' },
+      { src: 'https://picsum.photos/seed/zen-calm-3/800/500', alt: 'Wellness technology' },
+      { src: 'https://picsum.photos/seed/zen-calm-4/800/500', alt: 'Calm relaxation' },
+      { src: 'https://picsum.photos/seed/zen-calm-5/800/500', alt: 'Futuristic meditation' },
+      { src: 'https://picsum.photos/seed/zen-calm-6/800/500', alt: 'Mindful living' }
+    ];
+
+    /* ============================================
+       LOADING SCREEN
+    ============================================ */
+    window.addEventListener('load', () => {
+      setTimeout(() => {
+        document.getElementById('loading-screen').classList.add('hidden');
+      }, 1200);
+    });
+
+    /* ============================================
+       DARK MODE
+    ============================================ */
+    const darkToggle = document.getElementById('dark-toggle');
+    const body = document.body;
+
+    // Load saved preference
+    if (localStorage.getItem('godaura-dark') === 'true') {
+      body.classList.add('dark-mode');
+      darkToggle.innerHTML = '<i class="fas fa-sun"></i>';
+    }
+
+    darkToggle.addEventListener('click', () => {
+      body.classList.toggle('dark-mode');
+      const isDark = body.classList.contains('dark-mode');
+      localStorage.setItem('godaura-dark', isDark);
+      darkToggle.innerHTML = isDark ? '<i class="fas fa-sun"></i>' : '<i class="fas fa-moon"></i>';
+      // Re-render charts with new theme
+      renderCharts();
+    });
+
+    /* ============================================
+       NAVBAR SCROLL BEHAVIOR
+    ============================================ */
+    const navbar = document.getElementById('navbar');
+    const scrollProgress = document.getElementById('scroll-progress');
+
+    window.addEventListener('scroll', () => {
+      // Navbar background
+      if (window.scrollY > 20) {
+        navbar.classList.add('scrolled');
+      } else {
+        navbar.classList.remove('scrolled');
+      }
+
+      // Scroll progress
+      const scrollTop = window.scrollY;
+      const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+      const scrollPercent = (scrollTop / docHeight) * 100;
+      scrollProgress.style.width = scrollPercent + '%';
+
+      // Active section highlighting
+      updateActiveNav();
+    });
+
+    function updateActiveNav() {
+      const sections = ['home', 'about', 'research', 'products'];
+      const navLinks = document.querySelectorAll('.nav-link');
+      let current = 'home';
+
+      sections.forEach(id => {
+        const section = document.getElementById(id);
+        if (section) {
+          const rect = section.getBoundingClientRect();
+          if (rect.top <= 150) {
+            current = id;
+          }
+        }
+      });
+
+      navLinks.forEach(link => {
+        link.classList.remove('active');
+        if (link.getAttribute('href') === '#' + current) {
+          link.classList.add('active');
+        }
+      });
+    }
+
+    /* ============================================
+       HAMBURGER / MOBILE MENU
+    ============================================ */
+    const hamburgerBtn = document.getElementById('hamburger-btn');
+    const mobileMenu = document.getElementById('mobile-menu');
+    const mobileOverlay = document.getElementById('mobile-overlay');
+    const mobileClose = document.getElementById('mobile-close');
+
+    function openMobileMenu() {
+      mobileMenu.classList.add('open');
+      mobileOverlay.classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+    function closeMobileMenu() {
+      mobileMenu.classList.remove('open');
+      mobileOverlay.classList.remove('open');
+      document.body.style.overflow = '';
+    }
+
+    hamburgerBtn.addEventListener('click', openMobileMenu);
+    mobileClose.addEventListener('click', closeMobileMenu);
+    mobileOverlay.addEventListener('click', closeMobileMenu);
+
+    // Close mobile menu on link click
+    document.querySelectorAll('.mobile-link').forEach(link => {
+      link.addEventListener('click', () => {
+        closeMobileMenu();
+      });
+    });
+
+    /* ============================================
+       SIGN IN MODAL
+    ============================================ */
+    const signinModal = document.getElementById('signin-modal');
+    const signinClose = document.getElementById('signin-close');
+
+    function openSignin() {
+      signinModal.classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+    function closeSignin() {
+      signinModal.classList.remove('open');
+      document.body.style.overflow = '';
+    }
+
+    document.getElementById('nav-login-btn').addEventListener('click', openSignin);
+    document.getElementById('hero-signin-btn').addEventListener('click', openSignin);
+    document.getElementById('footer-login').addEventListener('click', (e) => { e.preventDefault(); openSignin(); });
+    document.getElementById('footer-signin').addEventListener('click', (e) => { e.preventDefault(); openSignin(); });
+    signinClose.addEventListener('click', closeSignin);
+    signinModal.addEventListener('click', (e) => { if (e.target === signinModal) closeSignin(); });
+
+    document.getElementById('signin-form').addEventListener('submit', () => {
+      showToast('<i class="fas fa-check-circle"></i> Sign in successful! Welcome back.');
+      closeSignin();
+    });
+    document.getElementById('google-signin').addEventListener('click', () => {
+      showToast('<i class="fas fa-check-circle"></i> Google sign-in initiated.');
+      closeSignin();
+    });
+
+    /* ============================================
+       BUY MODAL
+    ============================================ */
+    const buyModal = document.getElementById('buy-modal');
+    const buyClose = document.getElementById('buy-close');
+
+    function openBuyModal(index) {
+      const product = PRODUCT_DATA[index];
+      document.getElementById('buy-img').src = product.img;
+      document.getElementById('buy-title').textContent = product.name;
+      document.getElementById('buy-price').textContent = product.price;
+
+      const specList = document.getElementById('buy-specs');
+      specList.innerHTML = '';
+      Object.entries(product.specs).forEach(([key, val]) => {
+        const li = document.createElement('li');
+        li.innerHTML = `<span>${key}</span><span>${val}</span>`;
+        specList.appendChild(li);
+      });
+
+      buyModal.classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+    function closeBuyModal() {
+      buyModal.classList.remove('open');
+      document.body.style.overflow = '';
+    }
+
+    document.querySelectorAll('.buy-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        openBuyModal(parseInt(btn.dataset.product));
+      });
+    });
+    buyClose.addEventListener('click', closeBuyModal);
+    buyModal.addEventListener('click', (e) => { if (e.target === buyModal) closeBuyModal(); });
+
+    document.getElementById('buy-confirm').addEventListener('click', () => {
+      showToast('<i class="fas fa-shopping-cart"></i> Item added to cart!');
+      closeBuyModal();
+    });
+
+    /* ============================================
+       TOAST
+    ============================================ */
+    function showToast(html) {
+      const toast = document.getElementById('toast');
+      toast.innerHTML = html;
+      toast.classList.add('show');
+      setTimeout(() => toast.classList.remove('show'), 3000);
+    }
+
+    /* ============================================
+       CAROUSEL
+    ============================================ */
+    const carouselTrack = document.getElementById('carousel-track');
+    const dotsContainer = document.getElementById('carousel-dots');
+    let carouselVisibleCount = getCarouselVisibleCount();
+    let carouselCurrentIndex = 0;
+    let carouselAutoTimer = null;
+    let touchStartX = 0;
+    let touchEndX = 0;
+
+    function getCarouselVisibleCount() {
+      if (window.innerWidth < 768) return 1;
+      if (window.innerWidth < 1024) return 2;
+      return 3;
+    }
+
+    function buildCarousel() {
+      carouselVisibleCount = getCarouselVisibleCount();
+      carouselCurrentIndex = carouselVisibleCount; // Start after prepend clones
+
+      // Build slides: prepend clones + originals + append clones
+      carouselTrack.innerHTML = '';
+
+      // Prepend clones
+      for (let i = CAROUSEL_IMAGES.length - carouselVisibleCount; i < CAROUSEL_IMAGES.length; i++) {
+        const slide = createSlide(CAROUSEL_IMAGES[i]);
+        slide.dataset.clone = 'prepend';
+        carouselTrack.appendChild(slide);
+      }
+
+      // Original slides
+      CAROUSEL_IMAGES.forEach((img, i) => {
+        const slide = createSlide(img);
+        slide.dataset.index = i;
+        carouselTrack.appendChild(slide);
+      });
+
+      // Append clones
+      for (let i = 0; i < carouselVisibleCount; i++) {
+        const slide = createSlide(CAROUSEL_IMAGES[i]);
+        slide.dataset.clone = 'append';
+        carouselTrack.appendChild(slide);
+      }
+
+      // Set slide widths
+      updateSlideWidths();
+
+      // Build dots
+      buildDots();
+
+      // Set initial position without animation
+      setCarouselPosition(false);
+
+      // Start auto-play
+      startAutoPlay();
+    }
+
+    function createSlide(imgData) {
+      const slide = document.createElement('div');
+      slide.className = 'carousel-slide';
+      slide.innerHTML = `<img src="${imgData.src}" alt="${imgData.alt}" loading="lazy">`;
+      return slide;
+    }
+
+    function updateSlideWidths() {
+      const slides = carouselTrack.querySelectorAll('.carousel-slide');
+      const widthPercent = 100 / carouselVisibleCount;
+      slides.forEach(s => {
+        s.style.flex = `0 0 ${widthPercent}%`;
+      });
+    }
+
+    function setCarouselPosition(animate = true) {
+      const slideWidthPercent = 100 / carouselVisibleCount;
+      const offset = -(carouselCurrentIndex * slideWidthPercent);
+      carouselTrack.style.transition = animate ? 'transform 0.65s cubic-bezier(0.4,0,0.2,1)' : 'none';
+      carouselTrack.style.transform = `translateX(${offset}%)`;
+      updateDots();
+    }
+
+    function carouselNext() {
+      carouselCurrentIndex++;
+      setCarouselPosition(true);
+    }
+
+    function carouselPrev() {
+      carouselCurrentIndex--;
+      setCarouselPosition(true);
+    }
+
+    // Handle infinite loop jumps after transition
+    carouselTrack.addEventListener('transitionend', () => {
+      const totalOriginal = CAROUSEL_IMAGES.length;
+
+      // If in append clone zone
+      if (carouselCurrentIndex >= totalOriginal + carouselVisibleCount) {
+        carouselCurrentIndex -= totalOriginal;
+        setCarouselPosition(false);
+      }
+      // If in prepend clone zone
+      if (carouselCurrentIndex < carouselVisibleCount) {
+        carouselCurrentIndex += totalOriginal;
+        setCarouselPosition(false);
+      }
+    });
+
+    function buildDots() {
+      dotsContainer.innerHTML = '';
+      for (let i = 0; i < CAROUSEL_IMAGES.length; i++) {
+        const dot = document.createElement('button');
+        dot.className = 'carousel-dot';
+        dot.setAttribute('aria-label', `Go to slide ${i + 1}`);
+        dot.addEventListener('click', () => {
+          carouselCurrentIndex = carouselVisibleCount + i;
+          setCarouselPosition(true);
+          resetAutoPlay();
+        });
+        dotsContainer.appendChild(dot);
+      }
+    }
+
+    function updateDots() {
+      const realIndex = ((carouselCurrentIndex - carouselVisibleCount) % CAROUSEL_IMAGES.length + CAROUSEL_IMAGES.length) % CAROUSEL_IMAGES.length;
+      const dots = dotsContainer.querySelectorAll('.carousel-dot');
+      dots.forEach((d, i) => d.classList.toggle('active', i === realIndex));
+    }
+
+    function startAutoPlay() {
+      clearInterval(carouselAutoTimer);
+      carouselAutoTimer = setInterval(carouselNext, 6000);
+    }
+
+    function resetAutoPlay() {
+      startAutoPlay();
+    }
+
+    document.getElementById('carousel-next').addEventListener('click', () => {
+      carouselNext();
+      resetAutoPlay();
+    });
+    document.getElementById('carousel-prev').addEventListener('click', () => {
+      carouselPrev();
+      resetAutoPlay();
+    });
+
+    // Touch/swipe support
+    const carouselWrapper = document.querySelector('.carousel-wrapper');
+    carouselWrapper.addEventListener('touchstart', (e) => {
+      touchStartX = e.changedTouches[0].screenX;
+    }, { passive: true });
+    carouselWrapper.addEventListener('touchend', (e) => {
+      touchEndX = e.changedTouches[0].screenX;
+      const diff = touchStartX - touchEndX;
+      if (Math.abs(diff) > 50) {
+        if (diff > 0) { carouselNext(); } else { carouselPrev(); }
+        resetAutoPlay();
+      }
+    }, { passive: true });
+
+    // Pause on hover
+    carouselWrapper.addEventListener('mouseenter', () => clearInterval(carouselAutoTimer));
+    carouselWrapper.addEventListener('mouseleave', startAutoPlay);
+
+    // Rebuild on resize
+    let resizeTimer;
+    window.addEventListener('resize', () => {
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(() => {
+        const newCount = getCarouselVisibleCount();
+        if (newCount !== carouselVisibleCount) {
+          buildCarousel();
+        } else {
+          updateSlideWidths();
+          setCarouselPosition(false);
+        }
+      }, 250);
+    });
+
+    buildCarousel();
+
+    /* ============================================
+       CHARTS (Chart.js)
+    ============================================ */
+    let charts = {};
+
+    function getChartColors() {
+      const isDark = body.classList.contains('dark-mode');
+      return {
+        cyan: 'rgba(0,229,255,1)',
+        cyanFill: isDark ? 'rgba(0,229,255,0.15)' : 'rgba(0,229,255,0.12)',
+        grid: isDark ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.06)',
+        text: isDark ? 'rgba(255,255,255,0.5)' : 'rgba(0,0,0,0.45)',
+        cyanDark: 'rgba(0,184,212,1)',
+        cyanDarkFill: isDark ? 'rgba(0,184,212,0.15)' : 'rgba(0,184,212,0.12)',
+      };
+    }
+
+    function renderCharts() {
+      // Destroy existing charts
+      Object.values(charts).forEach(c => c.destroy());
+      charts = {};
+
+      const c = getChartColors();
+      const commonOptions = {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: { legend: { display: false } },
+        scales: {
+          x: {
+            grid: { color: c.grid },
+            ticks: { color: c.text, font: { family: "'Space Grotesk', sans-serif", size: 11 } }
+          },
+          y: {
+            grid: { color: c.grid },
+            ticks: { color: c.text, font: { family: "'Space Grotesk', sans-serif", size: 11 } }
+          }
+        }
+      };
+
+      // Stress Reduction (Line)
+      charts.stress = new Chart(document.getElementById('chart-stress'), {
+        type: 'line',
+        data: {
+          labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4', 'Week 5', 'Week 6', 'Week 7', 'Week 8'],
+          datasets: [{
+            label: 'Cortisol Level',
+            data: [78, 72, 65, 58, 49, 42, 36, 30],
+            borderColor: c.cyan,
+            backgroundColor: c.cyanFill,
+            fill: true,
+            tension: 0.4,
+            pointBackgroundColor: c.cyan,
+            pointBorderColor: c.cyan,
+            pointRadius: 4,
+            pointHoverRadius: 6,
+            borderWidth: 2.5
+          }]
+        },
+        options: commonOptions
+      });
+
+      // Sleep Improvement (Bar)
+      charts.sleep = new Chart(document.getElementById('chart-sleep'), {
+        type: 'bar',
+        data: {
+          labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4', 'Week 5', 'Week 6', 'Week 7', 'Week 8'],
+          datasets: [{
+            label: 'Sleep Hours',
+            data: [4.5, 5.0, 5.5, 6.2, 6.8, 7.1, 7.5, 7.8],
+            backgroundColor: c.cyanFill,
+            borderColor: c.cyan,
+            borderWidth: 1.5,
+            borderRadius: 6,
+            hoverBackgroundColor: c.cyan
+          }]
+        },
+        options: commonOptions
+      });
+
+      // Focus Tracking (Line)
+      charts.focus = new Chart(document.getElementById('chart-focus'), {
+        type: 'line',
+        data: {
+          labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4', 'Week 5', 'Week 6', 'Week 7', 'Week 8'],
+          datasets: [{
+            label: 'Focus Score',
+            data: [35, 42, 48, 55, 63, 70, 76, 82],
+            borderColor: c.cyanDark,
+            backgroundColor: c.cyanDarkFill,
+            fill: true,
+            tension: 0.4,
+            pointBackgroundColor: c.cyanDark,
+            pointBorderColor: c.cyanDark,
+            pointRadius: 4,
+            pointHoverRadius: 6,
+            borderWidth: 2.5
+          }]
+        },
+        options: commonOptions
+      });
+
+      // Meditation Consistency (Bar)
+      charts.meditation = new Chart(document.getElementById('chart-meditation'), {
+        type: 'bar',
+        data: {
+          labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4', 'Week 5', 'Week 6', 'Week 7', 'Week 8'],
+          datasets: [{
+            label: 'Sessions/Week',
+            data: [2, 3, 4, 5, 5, 6, 6, 7],
+            backgroundColor: c.cyanDarkFill,
+            borderColor: c.cyanDark,
+            borderWidth: 1.5,
+            borderRadius: 6,
+            hoverBackgroundColor: c.cyanDark
+          }]
+        },
+        options: commonOptions
+      });
+    }
+
+    renderCharts();
+
+    /* ============================================
+       PARTICLES
+    ============================================ */
+    const particleCanvas = document.getElementById('particles-canvas');
+    const pCtx = particleCanvas.getContext('2d');
+    let particles = [];
+
+    function resizeParticleCanvas() {
+      particleCanvas.width = window.innerWidth;
+      particleCanvas.height = window.innerHeight;
+    }
+    resizeParticleCanvas();
+    window.addEventListener('resize', resizeParticleCanvas);
+
+    class Particle {
+      constructor() {
+        this.reset();
+      }
+      reset() {
+        this.x = Math.random() * particleCanvas.width;
+        this.y = Math.random() * particleCanvas.height;
+        this.size = Math.random() * 2.5 + 0.5;
+        this.speedX = (Math.random() - 0.5) * 0.4;
+        this.speedY = (Math.random() - 0.5) * 0.4;
+        this.opacity = Math.random() * 0.35 + 0.05;
+      }
+      update() {
+        this.x += this.speedX;
+        this.y += this.speedY;
+        if (this.x < 0 || this.x > particleCanvas.width) this.speedX *= -1;
+        if (this.y < 0 || this.y > particleCanvas.height) this.speedY *= -1;
+      }
+      draw() {
+        pCtx.beginPath();
+        pCtx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+        pCtx.fillStyle = `rgba(0,229,255,${this.opacity})`;
+        pCtx.fill();
+      }
+    }
+
+    // Create particles
+    for (let i = 0; i < 60; i++) {
+      particles.push(new Particle());
+    }
+
+    function animateParticles() {
+      pCtx.clearRect(0, 0, particleCanvas.width, particleCanvas.height);
+      particles.forEach(p => {
+        p.update();
+        p.draw();
+      });
+      requestAnimationFrame(animateParticles);
+    }
+    animateParticles();
+
+    /* ============================================
+       CUSTOM CURSOR
+    ============================================ */
+    const cursorDot = document.getElementById('cursor-dot');
+    const cursorRing = document.getElementById('cursor-ring');
+    let cursorX = 0, cursorY = 0;
+    let ringX = 0, ringY = 0;
+
+    document.addEventListener('mousemove', (e) => {
+      cursorX = e.clientX;
+      cursorY = e.clientY;
+      cursorDot.style.left = cursorX + 'px';
+      cursorDot.style.top = cursorY + 'px';
+    });
+
+    function animateCursorRing() {
+      ringX += (cursorX - ringX) * 0.15;
+      ringY += (cursorY - ringY) * 0.15;
+      cursorRing.style.left = ringX + 'px';
+      cursorRing.style.top = ringY + 'px';
+      requestAnimationFrame(animateCursorRing);
+    }
+    animateCursorRing();
+
+    // Hover effect on interactive elements
+    const interactiveEls = 'a, button, input, .product-card, .about-card, .carousel-btn';
+    document.querySelectorAll(interactiveEls).forEach(el => {
+      el.addEventListener('mouseenter', () => cursorRing.classList.add('hover'));
+      el.addEventListener('mouseleave', () => cursorRing.classList.remove('hover'));
+    });
+    // Re-observe on DOM changes (for dynamically added elements)
+    const cursorObserver = new MutationObserver(() => {
+      document.querySelectorAll(interactiveEls).forEach(el => {
+        el.removeEventListener('mouseenter', cursorHoverIn);
+        el.removeEventListener('mouseleave', cursorHoverOut);
+        el.addEventListener('mouseenter', cursorHoverIn);
+        el.addEventListener('mouseleave', cursorHoverOut);
+      });
+    });
+    function cursorHoverIn() { cursorRing.classList.add('hover'); }
+    function cursorHoverOut() { cursorRing.classList.remove('hover'); }
+    cursorObserver.observe(document.body, { childList: true, subtree: true });
+
+    /* ============================================
+       SCROLL REVEAL ANIMATIONS
+    ============================================ */
+    const revealObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+
+    document.querySelectorAll('.reveal, .reveal-left, .reveal-right').forEach(el => {
+      revealObserver.observe(el);
+    });
+
+    /* ============================================
+       KEYBOARD ACCESSIBILITY
+    ============================================ */
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        closeSignin();
+        closeBuyModal();
+        closeMobileMenu();
+      }
+    });
+  </script>
+</body>
+
+</html>
